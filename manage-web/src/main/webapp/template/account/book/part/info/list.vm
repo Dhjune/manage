@@ -1,0 +1,137 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+    <script >
+		function partInfo_delete(partId,platId){
+			 var CarteValue = confirm("确认删除");
+            if(CarteValue){
+				 window.open ('/manage/book/part/info/delete?partId='+ partId+'&platId='+platId  , '_self');
+				}
+			}
+    </script>
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+			<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">漫画家 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/author/create">添加漫画家</a></li>
+                  <li><a href="/manage/book/author/list">漫画家列表</a></li>   
+                </ul>
+              </div>
+				
+			  <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">漫画分类 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/type/create">添加分类</a></li>
+                  <li><a href="/manage/book/type/list">分类列表</a></li>
+                </ul>
+              </div><!-- /btn-group -->
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">漫画资源<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/create">添加漫画</a></li>
+                  <li><a href="/manage/book/list">漫画列表</a></li>
+                  
+                </ul>
+              </div><!-- /btn-group -->
+              
+            
+			   
+            </div>
+			<hr>
+			<p class="text-center text-primary">
+					<span style="color:blue">章节内容
+                    </span>
+				</p>
+			<div class="highlight">
+				
+				 <p class="text-left text-primary">
+    					<a href="/manage/book/list" >
+                                  漫画>       
+			          </a><a href="/manage/book/view?id=$!{part.book.id}" >
+                          $!{part.book.bookTitle}       
+					  </a>><a href="/manage/book/part/view?id=$!{part.id}" >
+                          $!{part.partName}       
+			          </a>
+                       
+    				</p>
+			<div class="row">			  
+              			  
+			  <a class="btn" href="create?partId=$!{part.id}">
+                              添加
+               </a>
+			  <table class="table table-bordered">																			
+				<tr>
+				<!-- 章节提示，不显示了	<th>章节名称</th> -->
+					<th>平台</th>
+					<th>文件大小</th>						
+					<th>文件类型</th>
+                    <th>状态</th>
+					<th>操作</th>
+				</tr>				
+				#foreach($item in $!{context.list})
+                <tr>
+					<!-- <td>$!{item.pk.bookPart.partName}</td> -->
+					
+					<td>#if(${item.pk.platForm})
+							$!{item.pk.platForm.name}
+						#else
+							default
+						#end
+					</td>
+					<td>$!{item.fileSize}k</td>		
+					<td>$!{item.fileType}</td>	
+					<td>#if($!{item.status}==1)
+							使用
+							#else
+								未使用
+								#end
+					</td>
+					<td>
+						<a  class="btn btn-primary btn-sm" href="view?partId=$!{item.pk.bookPart.id}&platId=$!{item.pk.platForm.id}">详情</a>
+						<!--
+						<button type="button" class="btn btn-default btn-sm" onclick="partInfo_delete($!{item.pk.bookPart.id},$!{item.pk.platForm.id})">删除</button>
+						-->
+						#if($!{item.status}==1)
+						
+							<a  class="btn btn-primary btn-sm" href="upused?partId=$!{item.pk.bookPart.id}&platId=$!{item.pk.platForm.id}&status=0">不使用</a>
+						#else	
+							<a  class="btn btn-primary btn-sm" href="upused?partId=$!{item.pk.bookPart.id}&platId=$!{item.pk.platForm.id}&status=1">使用</a>
+						#end	
+					</td>
+				</tr>
+				#end
+				</table>
+				#parse("/layout/pagenav.vm")
+			  </div>
+			</div>	
+				           
+       </div>
+      </div>  
+    <hr>
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("./layout/header.html")   
+    
+</head>
+
+<body>
+#parse("./layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("./layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				
+				<div class="btn-group">
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">活动管理<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="/manage/activity/list">活动列表</a></li>
+                     <li><a href="/manage/activity/create">添加活动</a></li>
+					 <li><a href="#">待续...</a></li>
+                     </ul>
+                 </div>
+				 
+				  <div class="btn-group">
+                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">用户互动<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">查看列表</a></li>
+                     <li><a href="#">待续...</a></li>
+                     </ul>
+                 </div>
+			   
+				 
+			  
+            </div>
+			<hr>
+			<div class="highlight">
+				
+			</div>	
+				
+            
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+	
+</div>
+
+</body>
+</html>

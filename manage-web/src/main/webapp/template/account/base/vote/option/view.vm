@@ -1,0 +1,235 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+		
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+			<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">APPLICATION<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/app/create">app添加</a></li>
+                  <li><a href="/manage/base/app/list">app列表</a></li>              
+                </ul>
+              </div>
+			
+				<div class="btn-group">
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">平台管理 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/platform/create">添加平台</a></li>
+                  <li><a href="/manage/base/platform/list">平台列表</a></li>              
+                </ul>
+              </div>
+								
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">翻译团队 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/transteam/create">添加团队</a></li>
+                  <li><a href="/manage/base/transteam/list">团队列表</a></li>               
+                </ul>
+              </div>
+              			  
+			  <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">投票列表 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">			
+                  <li><a href="/manage/base/vote/create">添加投票</a></li>
+                  <li><a href="/manage/base/vote/list">投票列表</a></li>    
+				  <li><a href="#">其他</a></li> 
+				  
+                </ul>
+              </div>
+			   <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">用户投票计划 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                   <li><a href="/manage/base/vote/plan/user/list">计划列表</a></li>
+                  <li><a href="/manage/base/vote/plan/user/create">添加计划</a></li>
+                  
+                </ul>
+              </div>
+            </div>
+			
+			
+			<hr>
+			<p class="text-center text-primary">
+				  
+					<span style="color:blue">投票详情
+                    </span>
+			</p>
+			<div class="highlight">
+				
+			<p class="text-left text-primary">
+					<p class="text-left text-primary">
+					<a href="/manage/base/vote/list" >
+                                  投票      
+					</a>><a href="/manage/base/vote/view?id=$!{vote.id}" >
+                      $!{vote.subject}       
+					 </a>                          				                   
+				</p>
+				
+			<div class="row">
+              <div class="col-md-5">
+					<table class="table">
+					<tr>
+					<td>
+    					<p class="text-left">
+							主题：&nbsp;&nbsp;<span class="text-primary" ><small>$!{vote.subject}</small>
+                        </p>
+					</td>
+					</tr>
+					<tr>
+					<td>
+    					<p class="text-left">
+    					 介绍: &nbsp;&nbsp;<span class="text-primary" ><small>$!{vote.intro}</small>
+                        </p>
+					</td>						
+					</tr>
+					<tr>
+					<td>
+    					<p class="text-left">
+    					 状态: &nbsp;&nbsp;<span class="text-primary" ><small>#if($!{vote.voteType}==0)
+							 有效
+						#elseif($!{vote.voteType}==1)
+							无效
+						#else
+							待生效
+																
+						#end</small>
+                        </p>
+					</td>						
+					</tr>
+                   </table>
+			  </div>
+             
+              <div class="col-md-7">
+				<a class="btn btn-info btn-sm" type="button" href="/manage/base/vote/option/create?voteId=$!{vote.id}">
+					添加
+               </a>	
+				<table class="table table-bordered">																			
+				<tr>
+					
+					
+					<th>选项词</th>
+					
+					<th>选项主题</th>
+					
+					<th>选项状态</th>
+					
+					<th>其他</th>
+				</tr>				
+				#foreach($item in $!{context.list})
+                <tr>
+					
+					<td>$!{item.key}</td>
+					<td>$!{item.subject}</td>
+					<td>$!{item.status}</td>
+					<td>
+						#if($!{item.voteType}==0)
+							 有效
+						#elseif($!{item.voteType}==1)
+							无效
+						#else
+							待生效
+						#end
+					</td>
+					
+					
+					<td><div class="btn-group btn-group-xs">
+						<a class="btn" href="view?id=$!{item.id}">查看</a>	
+					</div></td>
+				</tr>
+				#end
+				</table>
+				
+			  </div>
+            </div>
+			
+			
+							
+				
+	        <span class="text-dangger" >子投票列表</span>
+			——————————————————————
+			
+				<br>
+				
+			<div class="row">
+				
+				<div>
+				<a class="btn btn-info btn-sm" type="button" href="/manage/base/vote/add?id=$!{vote.id}">
+					添加
+               </a>	
+				<table class="table table-bordered">																			
+				<tr>
+					<th>投票主题</th>
+					
+					<th>投票介绍</th>
+					
+					<th>投票方式</th>
+					
+					<th>投票状态</th>
+					
+					<th>其他</th>
+				</tr>				
+				#foreach($item in $!{context.list})
+                <tr>
+					<td>$!{item.subject}</td>
+					<td>$!{item.intro}</td>
+					<td>
+						#if($!{item.voteType}==0)
+							单选
+						#elseif($!{item.voteType}==1)
+							多选
+						#else
+							文本
+						#end
+					</td>
+					<td>#if($!{item.status}==0)
+							无效
+						#elseif($!{item.status}==1)
+							有效
+						#else
+							待生效
+						#end</td>
+					
+					<td><div class="btn-group btn-group-xs">
+						<a class="btn" href="view?id=$!{item.id}">查看</a>	
+					</div></td>
+				</tr>
+				#end
+				</table>
+				
+                </div>
+								
+                </div>
+				
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+ 
+	 	
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+</div>
+</body>
+</html>

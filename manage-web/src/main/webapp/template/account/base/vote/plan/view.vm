@@ -1,0 +1,251 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+	 <script >
+		function option_delete(id){
+			 var CarteValue = confirm("确认删除");
+            if(CarteValue){
+				 window.open ('/manage/base/vote/option/delete?id='+ id +'&voteId='+$!{vote.id} , '_self');
+				}
+			}
+		
+		function vote_delete(id){
+			 var CarteValue = confirm("确认删除");
+            if(CarteValue){
+				 window.open ('/manage/base/vote/delete?id='+ id  , '_self');
+				}
+			}
+    </script>	
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+			<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">APPLICATION<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/app/create">app添加</a></li>
+                  <li><a href="/manage/base/app/list">app列表</a></li>              
+                </ul>
+              </div>
+			
+				<div class="btn-group">
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">平台管理 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/platform/create">添加平台</a></li>
+                  <li><a href="/manage/base/platform/list">平台列表</a></li>              
+                </ul>
+              </div>
+								
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">翻译团队 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/transteam/create">添加团队</a></li>
+                  <li><a href="/manage/base/transteam/list">团队列表</a></li>               
+                </ul>
+              </div>
+              			  
+			  <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">投票计划 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">			
+                  <li><a href="/manage/base/vote/create">新增</a></li>
+                  <li><a href="/manage/base/vote/list">列表</a></li>    
+				  <li><a href="#">其他</a></li> 			  
+                </ul>
+              </div>
+			   <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">用户投票计划 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                   <li><a href="/manage/base/vote/plan/user/list">计划列表</a></li>
+                  <li><a href="/manage/base/vote/plan/user/create">添加计划</a></li>
+                  
+                </ul>
+              </div>
+            </div>
+			
+			
+			<hr>
+			<p class="text-center text-primary">
+				  
+					<span style="color:blue">投票计划详情
+                    </span>
+			</p>
+			<div class="highlight">
+				
+			<p class="text-left text-primary">
+				引用投票：&nbsp;&nbsp;<span style="color:red"> <$!{plan.vote.subject}>
+            	</span>
+			</p>	
+				
+			<div class="row">
+			
+              <div class="col-md-5">
+					<table class="table">
+					#if($!{plan.refType}=="part")
+					<tr>
+					<td>
+    					<p class="text-left">
+						  漫画名称：&nbsp;&nbsp;<span class="text-primary" ><small>$!{part.book.bookTitle}</small>
+                        </p>
+					</td>
+					</tr>
+					<tr>
+					<td>
+    					<p class="text-left">
+    					 章节: &nbsp;&nbsp;<span class="text-primary" ><small>$!{part.dispOrder}</small>
+                        </p>
+					</td>						
+					</tr>
+					
+					<tr>
+					<td>
+    					<p class="text-left">
+    					 章节名称: &nbsp;&nbsp;<span class="text-primary" ><small>$!{part.partName}</small>
+                        </p>
+					</td>						
+					</tr>
+					
+					<tr>
+					<td>
+    					<p class="text-left">
+    					 状态: &nbsp;&nbsp;<span class="text-primary" ><small>
+						#if($!{plan.status}==0)
+							无效 
+						#elseif($!{plan.status}==1)
+							有效
+						#else
+							待生效														
+						#end</small>
+						&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-info btn-sm" type="button" href="/manage/base/vote/plan/update?id=$!{plan.id}">
+							修改
+						</a>	
+                        </p>
+					</td>						
+					</tr>
+					#elseif($!{activity})
+						<tr>
+					<td>
+    					<p class="text-left">
+						  漫画名称：&nbsp;&nbsp;<span class="text-primary" ><small>$!{part.book.bookTitle}</small>
+                        </p>
+					</td>
+					</tr>
+					
+					
+					<tr>
+					<td>
+    					<p class="text-left">
+    					 章节名称: &nbsp;&nbsp;<span class="text-primary" ><small>$!{part.partName}</small>
+                        </p>
+					</td>						
+					</tr>
+						
+					<tr>
+					<td>
+    					<p class="text-left">
+    					 状态: &nbsp;&nbsp;<span class="text-primary" ><small>
+						#if($!{plan.status}==0)
+							无效 
+						#elseif($!{plan.status}==1)
+							有效
+						#else
+							待生效														
+						#end</small>
+						&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-info btn-sm" type="button" href="/manage/base/vote/plan/update?id=$!{plan.id}">
+							修改
+						</a>	
+                        </p>
+					</td>						
+					</tr>
+					#elseif($!{plan.refType}=="book")
+					<tr>
+					<td>
+    					<p class="text-left">
+						  漫画名称：&nbsp;&nbsp;<span class="text-primary" ><small>$!{bookinfo.bookTitle}</small>
+                        </p>
+					</td>
+					</tr>													
+					
+					<tr>
+					<td>
+    					<p class="text-left">
+    					 状态: &nbsp;&nbsp;<span class="text-primary" ><small>
+						#if($!{plan.status}==0)
+							无效 
+						#elseif($!{plan.status}==1)
+							有效
+						#else
+							待生效														
+						#end</small>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+                        </p>
+					</td>						
+					</tr>
+					
+					<tr>
+					<td>
+    					<p class="text-left">
+    					 状态: &nbsp;&nbsp;<span class="text-primary" ><small>
+						#if($!{plan.status}==0)
+							无效 
+						#elseif($!{plan.status}==1)
+							有效
+						#else
+							待生效														
+						#end</small>
+							
+                        </p>
+					</td>						
+					</tr>
+					
+					<tr>
+					<td>
+						&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-info btn-sm" type="button" href="/manage/base/vote/plan/update?id=$!{plan.id}">
+							修改
+						</a>
+                    </td>
+					</tr>
+					#end
+                   </table>
+			  </div>
+             
+              <div class="col-md-7">
+					<p class="text-left">   					
+						&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-info btn-sm" type="button" href="/manage/base/vote/view?id=$!{plan.vote.id}">
+							查看投票项
+						</a>	
+                        </p>
+				
+			  </div>
+			  
+            </div>																	      				
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+ 
+	 	
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+</div>
+</body>
+</html>

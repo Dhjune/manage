@@ -1,0 +1,252 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("./layout/header.html")
+	<script type="text/javascript" src="/manage/static/js/jquery.json-2.4.js"></script>
+	<script type="text/javascript" src="/manage/static/js/manage-use.js"></script>
+    <script >
+
+		var data= {'pageIndex':1} ;
+		var url='/manage/copyright/pageNavJson';	
+		
+		function repeatPage(content){
+			
+			if(content!=null &&content!=null){	
+				var strs ="<tr><th>ID</th><th>作品名</th><th>作者笔名</th><th>作品分类</th><th>来源</th><th>作品颜色</th><th>篇幅</th><th>更新状态</th><th>版权性质</th><th>版权期限</th><th>更多</th>";			
+				for(var index=0;index<content.list.length;index++){
+					var group = "<a type='button' class='btn btn-default' href='/manage/copyright/view?bookId="+content.list[index].book_id+"'><span class='glyphicon glyphicon-zoom-in'></span>详细</a>"	;
+					strs +='<tr><td>'+content.list[index].book_id+'</td><td>'+content.list[index].book_name+'</td><td>'+content.list[index].pen_name+'</td><td>'+content.list[index].book_type+'</td><td>'+ content.list[index].country+'</td><td>'+content.list[index].book_color+'</td><td>'+content.list[index].book_length+'</td><td>'+content.list[index].update_status+'</td><td>';
+					var nature =content.list[index].cr_nature;
+					var deadline =content.list[index].deadline;
+										
+					strs +=nature+'</td><td >'+deadline+'</td><td>'+group+'</td></tr>';					
+					
+				}	
+				$('#tdata').html(strs);
+			}			
+		}
+		
+		function initListener(){	
+		
+			var Aicons = document.getElementsByName('pageIndex');
+			var searchBtn = document.getElementById('searchBtn');								
+			for(var i=0;i<Aicons.length;i++){				
+				Aicons[i].onclick = function (){				
+					execAction(this,url,data);
+					
+				}						
+			}	
+					
+			searchBtn.onclick=function (){
+				data={'pageIndex':1};
+				execAction(document.getElementById('forsearch'),url,data);
+				//data={'pageIndex':1};
+			}
+			
+			
+		}
+		
+		function crBook_delete(id,pageIndex){
+			 var CarteValue = confirm("确认删除");
+            if(CarteValue){
+				 window.open ('/manage/copyright/book/delete?bookId='+ id+'&pageIndex='+pageIndex , '_self');
+			}
+			
+		}
+		
+		function book_delete(id){
+			 var CarteValue = confirm("确认删除");
+            if(CarteValue){
+				 window.open ('/manage/book/delete?id='+ id  , '_self');
+				}
+			}
+			
+			$(function () {
+    			/*
+    				或者jquery对象，attr('name')
+    			*/
+				/*eventAction('/manage/book/listJson',data,target)
+				//addEventHandler(target,'change',eventAction);
+				$.ajax({  
+                url : url,  
+                type : 'POST',  
+                data : $.toJSON(data),  
+                dataType : 'json',  
+                contentType : 'application/json',  
+                success : function(data, status, xhr) {
+				
+        			if(data != null){						
+        			    pageNav(data);
+						initListener();
+						repeatPage(data);
+        			}else{
+        				
+        			}
+                },  
+                Error : function(xhr, error, exception) {  
+                 
+                    alert(exception.toString());  
+                }  
+            }); */	
+			
+			initListener();
+			
+			
+		});			
+			
+    </script>
+    
+</head>
+
+<body>
+#parse("./layout/cr_top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	
+		
+        <div class="col-xs-13 col-sm-12">
+			<p class="text-center text-primary">
+					<span style="color:blue">
+						版权列表
+                    </span>
+				</p>
+			<div class="highlight">
+							
+				<div class="row">	
+					
+					<div class="col-md-9">
+				
+				</div>
+					<div class="col-md-3">
+						<form class="form-inline" role="form" action="/manage/book/list/search" method="post">
+							
+                          <div class="form-group">
+                            <label class="sr-only control-label" for="forvalue">作品搜索</label>
+                            <input type="text" name="search" class="form-control" id="forsearch" placeholder="作品名称或者作者笔名">
+                          </div>						  
+                          <button type="button" id="searchBtn" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>搜索</button>
+                        </form>
+					</div>
+					
+					
+					
+				</div>
+				<!--
+				 <div class="thumbnail">
+        				<dl class="dl-horizontal ">
+                          
+							
+							<dt>自定义时间</dt>
+                            <dd>
+								<p style="display:inline">
+								<input type="text" name="startStr" class="form-inline input-sm" id="startTime" placeholder="开始时间">至
+							    <input type="text" name="endStr" class="form-inline input-sm" id="endTime" placeholder="结束时间" style="display:inline">
+								</p>								
+							</dd>
+							
+                          </dl>
+        			 </div>
+					 -->
+				
+			<div class="row">			  			  
+			  <table class="table table-bordered" id="tdata" style="table-layout：fixed;width:100%">
+				
+				<tr>
+					<th style="width:2%"><div style="text-align:center">ID</div></th>
+					<th style="width:8%"><div style="text-align:center">作品名称</div></th>					
+                    <th style="width:8%"><div style="text-align:center">作者笔名</div></th>					
+					<th style="width:8%"><div style="text-align:center">作品分类</div></th>
+					<th style="width:5%"><div style="text-align:center">来源</div></th>
+					<th style="width:8%"><div style="text-align:center">作品颜色</div></th>
+                    <th style="width:5%"><div style="text-align:center">篇幅</div></th>					
+					<th style="width:8%"><div style="text-align:center">更新状态</div></th>
+					<th style="width:20%"><div style="text-align:center">版权性质</div></th>
+					<th style="width:20%"><div style="text-align:center">版权期限</div></th>
+					<th style="width:8%"><div style="text-align:center">更多</div></th>
+				</tr>				
+				#foreach($item in $!{context.list})
+                <tr>
+                    <td style="width:2%">
+						<div style="text-align:center">
+						<font size="2">$!{item.book_id}</font>
+						</div>
+					</td>
+					<td style="width:8%">
+						<div style="text-align:center">
+						<font size="2">$!{item.book_name}</font>
+                        </div></td>
+				
+					<td style="width:8%" ><div style="text-align:center"><font size="2">$!{item.pen_name}</font></div></td>
+					
+					<td  style="width:8%"><div style="text-align:center"><font size="2">$!{item.book_type}</font></div></td>
+					<td  style="width:5%"><div style="text-align:center"><font size="2">$!{item.country}</font></div></td>	
+					<td style="width:8%"><div style="text-align:center"><font size="2">$!{item.book_color}</font></div></td>
+					<td style="width:5%"><div style="text-align:center"><font size="2">$!{item.book_length}</font></div></td>
+					<td style="width:8%"><div style="text-align:center"><font size="2">$!{item.update_status}</font></div></td>	
+					<td style="width:20%"><div style="text-align:center"><font size="2">
+						$!{item.cr_nature}
+						
+						#foreach($info in $!{item.infos})
+							#if($!{info.status}>0)
+								$!{info.nature};
+							#end
+						#end
+						</font>
+						</div>
+					</td>
+					<td style="width:20%">
+						<div style="text-align:center">
+						<font size="2">
+    						$!{item.deadline}
+    						#foreach($info in $!{item.infos})
+    							#if($!{info.status}>0)
+    								$!{info.deadline};
+    							#end
+    						#end
+						</font>
+						</div>
+					</td>
+					
+					<td style="width:8%"><div class="btn-group"><a type="button" class="btn btn-default btn-xs" href="/manage/copyright/view?bookId=$!{item.book_id}"> 详细</a>	
+				
+					#if($!{admin.role_name}=="版权超级管理员A")
+						<a type="button" class="btn btn-default btn-xs" href="#" onclick="crBook_delete('$!{item.book_id}','$!{context.pageIndex}')">删除</a>	
+					#end
+					</div>
+					</td>
+				</tr>
+				#end
+				
+				</table>
+				 <div class=" pull-right" id="pageNav">
+					#parse("/layout/pagenav.vm")
+                </div>
+				
+			  </div>
+            </div>					
+			
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+
+
+
+</body>
+</html>

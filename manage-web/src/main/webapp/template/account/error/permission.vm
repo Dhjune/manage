@@ -1,0 +1,105 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("./layout/header.html")   
+    <script >
+	
+	function testParam(val){
+		
+		if(val == 1){
+			alert(this.A);
+		}else{
+		this.A = "sdgasg";
+		
+		alert("in method"+this.A);
+			}
+	}
+	
+	$(function (){
+    
+		testParam(0);
+		testParam(1);
+		alert("out method"+testParam);
+    
+    });
+
+	
+	var webSocket =
+      new WebSocket('ws://localhost:8080/manage/test/websoc');
+ 
+    webSocket.onerror = function(event) {
+      onError(event)
+    };
+	
+ 
+    webSocket.onmessage = function(event) {
+      onMessage(event)
+    };
+ 
+    function onMessage(event) {
+		//var book = $.evalJSON( event.data );
+		alert(event.data);
+     	//alert(book.bookTitle);
+	//	webSocket.close();
+    }
+ 		
+    function onOpen(event) {
+      alert(event.data);
+    }
+ 
+    function onError(event) {
+	
+      alert(event.data);
+
+    }
+
+    function start() {
+	
+	  webSocket.onopen = function(event) {
+       
+      };
+      webSocket.send('hello');
+	
+    }
+	
+	
+	
+    </script>
+</head>
+
+<body>
+#parse("./layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("./layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            
+			未登录或角色权限不足
+			
+		<hr>
+							
+           <button type="button" value="Start" onclick="start()" >websocket</button> 
+			
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

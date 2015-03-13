@@ -1,0 +1,250 @@
+<html >
+<head>
+	
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+	<link rel="stylesheet" type="text/css" href="/manage/static/kindeditor/themes/default/default.css"/>	
+	<script charset="utf-8" src="/manage/static/kindeditor/kindeditor.js"></script>
+	<script charset="utf-8" src="/manage/static/kindeditor/lang/zh_CN.js"></script>
+	
+	<script>
+		var basePath="http://122.224.130.75:8000";
+		
+			KindEditor.ready(function (K) {
+             var editor = K.editor({
+                allowFileManager: true,
+                fileManagerJson: '/manage/ke/filelist',
+                uploadJson: '/manage/ke/upload',
+                urlType: 'domain',
+                
+            });								
+			K('#ImageUrlBtn').click(function() {
+				editor.loadPlugin('image', function() {
+					editor.plugin.imageDialog({						
+						imageUrl :  K('#ImageUrlImg').attr('src'),
+						clickFn : function(url, title, width, height, border, align) {
+							K('#ImageUrlImg').attr('src', url);							
+							K('#headImage').val(url);					
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+		});		
+		
+		
+		
+		
+	</script>			
+    <style type="text/css">
+        .form_settings
+        {
+                width: 80%;               
+        }
+        </style
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">漫画家 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/author/create">添加漫画家</a></li>
+                  <li><a href="/manage/book/author/list">漫画家列表</a></li>   
+				  <li><a href="/manage/book/author/home">其他</a></li>
+                </ul>
+              </div>
+				
+			  <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">漫画分类 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/type/create">添加分类</a></li>
+                  <li><a href="/manage/book/type/list">分类列表</a></li>
+                  <li><a href="#">其他</a></li>                                   
+                </ul>
+              </div><!-- /btn-group -->
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">漫画资源<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/create">添加漫画</a></li>
+                  <li><a href="/manage/book/list">漫画列表</a></li>
+                  
+                </ul>
+              </div><!-- /btn-group -->
+              
+              
+			   
+            </div>
+			<hr>
+			<p class="text-center text-primary">
+				<span style="color:blue">漫画家修改
+                </span>
+			</p>
+			<div class="highlight">
+				<p class="text-left text-primary">
+				<a href="/manage/book/author/list" >
+                                 漫画家
+				</a>><a href="/manage/book/author/view?id=$!{author.id}" >
+                    $!{author.name}             
+				</a>                        				                   
+				</p>
+			  <div class="row">
+			  
+   
+			<br>			  
+			  	
+						
+		<table class="table table-bordered">
+                <tr><td>
+
+			  <form role="form" method="post" class="form-horizontal" action="/manage/book/author/update" >
+				
+					<input type="hidden" name="id" value="$!{author.id}"/>
+					<input type="hidden" name="token" value="$!{token}"/>
+					<input type="hidden" name="bookNum" value="$!{author.bookNum}"/>
+					<div class="form-group">
+                      <label for="forName" class="col-sm-2 control-label">作家名称:<span id="forName" style="color:red"> </span></label>
+					  <div class="col-sm-5" >
+						<input type="text" name="name" id="name" class="form-control input-sm form_settings" value="$!{author.name}"  placeholder="">	
+                          </div>
+                    </div>				
+                    <div class="form-group">
+                      <label for="forRealName" class="col-sm-2 control-label">真实姓名:<span id="forRealName" style="color:red"> </span></label>
+					  <div class="col-sm-5" >
+                       <input type="text" name="realName" id="realName" class="form-control input-sm form_settings" value="$!{author.realName}"  placeholder="">
+                    </div>
+					</div>
+					
+					<div class="form-group">
+                      <label for="forlinkName" class="col-sm-2 control-label">联系人:<span id="forlinkName" style="color:red"> </span></label>
+					  <div class="col-sm-5" >
+                      <input type="text" name="linkName" id="linkName" class="form-control input-sm form_settings" value="$!{author.linkName}"  placeholder="">
+                    </div>
+                    </div>
+					
+					<div class="form-group">
+                      <label for="forlinkTele" class="col-sm-2 control-label">联系电话:<span id="forlinkTele" style="color:red"> </span></label>
+					  <div class="col-sm-5" >
+                     <input type="text" name="linkTele" id="linkTele" class="form-control input-sm form_settings" value="$!{author.linkTele}"  placeholder="">
+                    </div>
+                    </div>
+							
+					<div class="form-group" >
+                        <label for="forlinkEmail" class="col-sm-2 control-label">邮件地址:<span id="forlinkEmail" style="color:red"> </span></label>
+						<div class="col-sm-5" >
+                         <input type="text" name="linkEmail" id="linkEmail" class="form-control input-sm form_settings" value="$!{author.linkEmail}"  placeholder="">
+                     </div>
+                     </div>
+					
+					
+					  
+					
+					<div class="form-group">
+                      <label for="forArea" class="col-sm-2 control-label" id="forArea">地区</label>
+					  <div class="col-sm-5" >
+                     <input type="text" name="area" id="area" class="form-control input-sm form_settings" value="$!{author.area}"  placeholder="">
+                    </div>
+                    </div>
+					
+					<div class="form-group">
+                      <label for="forCountry" class="col-sm-2 control-label">国家</label>
+					  <div class="col-sm-5" >
+                      <input type="text" name="country" id="country" class="form-control input-sm form_settings" value="$!{author.country}"  placeholder="">
+                    </div>
+                    </div>
+															
+					<div class="form-group">
+                      <label for="forbriefIntro" class="col-sm-2 control-label">简介</label>
+					  <div class="col-sm-5" >
+						 <textarea name="briefIntro" id="briefIntro" class="form-control input-sm form_settings" rows="3">$!{author.briefIntro}
+					  </textarea>  
+					  </div>
+                    </div>
+					
+					<div class="form-group">					
+                    <label for="forcompany" class="col-sm-2 control-label">所属公司</label>
+					<div class="col-sm-5" >
+                      <input type="text" name="company" id="company" class="form-control form_settings" placeholder="" value="$!{author.company}" >
+                    </div>
+                    </div>
+					
+					<div class="form-group">
+                      <label for="forbriefIntro" class="col-sm-2 control-label">头像</label>
+					  <div class="col-sm-8" >
+                      	<button type="button" class="btn btn-mini" id="ImageUrlBtn">选择图片
+                        </button>
+                        <br>
+                        <img id="ImageUrlImg" name="ImageUrlImg" src="$!{author.headImage}" 
+                             style="width:100px;height: 100px;" />
+                        <input type="hidden" name="headImage" id="headImage" value="$!{author.headImage}" >
+							</div>
+                    </div>
+					
+					 <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">是否认证<span id="forlinkEmail" style="color:red"> </span></label>			 
+						  <label class="radio-inline">
+                            <input type="radio" name="auth" id="status1" value="1"  #if($!{author.getAuth()} == 1) checked #end>
+                                                              已认证
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="auth" id="status2" value="0" #if($!{author.getAuth()} == 0) checked #end>
+                                                            未认证
+                          </label>                        
+                       </div>
+					
+					 <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">是否有效<span id="forlinkEmail" style="color:red"> </span></label>			 
+						  <label class="radio-inline">
+                            <input type="radio" name="status" id="status1" value="1" #if($!{author.status}== 1) checked #end>
+                                                              有效
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="status" id="status2" value="0" #if($!{author.status}== 0) checked #end>
+								无效
+                          </label>                        
+                       </div>
+					
+					 <div class="form-group">
+                           <div class="col-sm-offset-2 col-sm-10">
+                              <button type="submit" class="btn btn-primary"> 提交</button>
+                           </div>
+                       </div>	
+					
+                </form>
+				
+				
+				</td></tr>
+				</table>
+				
+			  </div>
+			  
+			</div>				
+			
+       </div>
+	   
+      </div>  
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

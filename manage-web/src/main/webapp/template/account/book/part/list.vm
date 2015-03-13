@@ -1,0 +1,161 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+		<link rel="stylesheet" type="text/css" href="/manage/static/kindeditor/themes/default/default.css"/>	
+	<script charset="utf-8" src="/manage/static/kindeditor/kindeditor-min.js"></script>
+	<script charset="utf-8" src="/manage/static/kindeditor/lang/zh_CN.js"></script>
+    <script >
+					
+			KindEditor.ready(function (K) {
+             var editor = K.editor({
+                allowFileManager: true,
+                fileManagerJson: '/manage/ke/filelist',
+                uploadJson: '/manage/ke/upload',
+                urlType: 'domain',
+                
+            });								
+			K('#ImageUrlBtn').click(function() {
+				editor.loadPlugin('image', function() {
+					editor.plugin.imageDialog({						
+						imageUrl :  K('#ImageUrlImg').attr('src'),
+						clickFn : function(url, title, width, height, border, align) {
+							K('#ImageUrlImg').attr('src', url);							
+							K('#headImage').val(url);							
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+		});				
+    </script>
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+			<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">漫画家 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/author/create">添加漫画家</a></li>
+                  <li><a href="/manage/book/author/list">漫画家列表</a></li>   
+                </ul>
+              </div>
+				
+			  <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">漫画分类 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/type/create">添加分类</a></li>
+                  <li><a href="/manage/book/type/list">分类列表</a></li>
+                </ul>
+              </div><!-- /btn-group -->
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">漫画资源<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/create">添加漫画</a></li>
+                  <li><a href="/manage/book/list">漫画列表</a></li>
+                  
+                </ul>
+              </div><!-- /btn-group -->
+              
+              
+			   
+            </div>
+			<hr>
+			<p class="text-center text-primary">
+				  
+					<span style="color:blue">漫画章节
+                    </span>
+			</p>
+			<div class="highlight">
+				
+			<p class="text-left text-primary">					
+    			<a href="/manage/book/list" >
+                                  漫画>       
+					</a><a href="/manage/book/view?id=$!{book.id}" >
+                             $!{book.bookTitle}       
+					 </a>                          				                   
+				</p>	
+				
+			<div class="row">  
+				
+              <div class="col-md-9">
+				<a href="/manage/book/part/create?bookId=$!{bookId}" class="btn btn-primary btn-sm" >
+                                         添加
+                </a>
+				
+				<table class="table table-bordered">
+					<tr>
+					<th >
+						序号
+                    </th>
+					<th>名称</th>
+					<th>页数</th>
+						
+					<th>状态</th>
+					<th>更多</th>
+					</tr>		
+				#set ($i=1)
+				#foreach($item in $!{context.list})
+					<tr>
+					<td> $!{item.partIndex} </td>	
+					<td> $!{item.partName} </td>
+					<td> $!{item.pageNum} </td>
+					
+					<td>
+						#if($!{item.status}==1)
+							使用
+							#else
+								未使用
+								#end
+					</td>
+					<td> <a class="btn btn-sm btn-primary" href="/manage/book/part/view?id=$!{item.id}">管理</a> </td>
+					</tr>	
+					
+				
+					
+				#end
+								    
+				
+				
+				</table>
+				#parse("/layout/pagenav.vm")
+                </div>
+				
+			  </div>
+            </div>
+			<br>
+				
+                </div>
+				
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+
+      </div>  
+	 	
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+</div>
+</body>
+</html>

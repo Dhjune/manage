@@ -1,0 +1,162 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html") 
+	<script >    
+    function book_delete(id){
+		var CarteValue = confirm("确认删除");
+        if(CarteValue){
+			 window.open ('/manage/book/author/delete?id='+ id  , '_self');
+			}
+		}
+	</script>
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">漫画家 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/author/create">添加漫画家</a></li>
+                  <li><a href="/manage/book/author/list">漫画家列表</a></li>   
+				  <li><a href="/manage/book/author/home">其他</a></li>
+                </ul>
+              </div>
+				
+			  <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">漫画分类 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/type/create">添加分类</a></li>
+                  <li><a href="/manage/book/type/list">分类列表</a></li>
+                  <li><a href="#">其他</a></li>                                   
+                </ul>
+              </div><!-- /btn-group -->
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">漫画资源<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/create">添加漫画</a></li>
+                  <li><a href="/manage/book/list">漫画列表</a></li>
+                  
+                </ul>
+              </div><!-- /btn-group -->
+              
+              
+			   
+            </div>
+			<hr>
+				<p class="text-center text-primary">
+					<span style="color:blue">漫画家列表
+                    </span>
+				</p>
+			<div class="highlight">
+				
+				<div class="row">	
+					
+					<div class="col-md-3">
+						
+					              
+				</div>
+					<div class="col-md-7">
+						  
+						<form class="form-inline" role="form" action="/manage/book/author/list/search" method="post">
+							
+                          <div class="form-group">
+                            <label class="sr-only control-label" for="forvalue">漫画家搜索</label>
+                            <input type="text" name="value" class="form-control" id="forvalue" placeholder="漫画家名称或者关键字">
+                          </div>
+                                      
+                          <button type="submit" class="btn btn-default">搜索</button>
+                        </form>
+					</div>
+					
+				</div>
+			<div class="row">			  
+             			  
+			 <a type="button" class="btn btn-default btn-sm" href="/manage/book/author/create">
+							添加
+						 </a>
+						 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						 <!--<a type="button" id="status1" href="/manage/book/author/list?status=1" class="btn #if($!{status}==1) btn-info #else btn-default #end btn-sm">已使用</a>
+					<a type="button" id="status0" href="/manage/book/author/list?status=0" class="btn #if($!{status}==0) btn-info #else btn-default #end btn-sm">未使用</a>
+					-->
+			  <table class="table table-bordered">																			
+				<tr>
+					<th>ID</th>
+					<th>名称</th>
+					<th>简介</th>
+					<th>联系方式</th>
+					<th>使用状态</th>
+					<th>操作</th>
+				</tr>				
+				#foreach($item in $!{context.list})
+                <tr>
+					<td >$!{item.id}</td>
+					<td>$!{item.name}</td>
+					<td>#if($!{item.briefIntro.length()}>15)
+						$!{item.briefIntro.substring(0,15)}...
+						#else
+							$!{item.briefIntro}
+							#end
+					</td>
+					<td>
+						$!{item.linkTele}
+						&nbsp;&nbsp;$!{item.linkEmail}
+					</td>
+					<td >
+						#if($!{item.status}==1)
+							使用
+							#elseif($!{item.status}==0)
+								未使用
+								#end
+                    </td>
+					
+					<td> 
+						
+					<a class="btn btn-info btn-xs" type="button" href="/manage/book/author/view?id=$!{item.id}">
+					查看
+					</a>	
+					<a class="btn btn-info btn-xs" type="button" href="/manage/book/author/update?id=$!{item.id}">
+					修改
+					</a>	
+					<a type="button" class="btn btn-info btn-xs" href="#" onclick="book_delete($!{item.id})">删除</a>
+					
+					</td>
+				</tr>
+				#end
+				</table>
+				#parse("/layout/pagenav.vm")
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

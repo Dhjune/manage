@@ -1,0 +1,416 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("./layout/header.html")   
+	<script type="text/javascript" src="/manage/static/highcharts/js/highcharts.js"></script>
+	<script type="text/javascript" src="/manage/static/highcharts/js/modules/exporting.js"></script>
+	<script type="text/javascript" src="/manage/static/js/jquery.json-2.4.js"></script>
+	<script type="text/javascript" src="/manage/static/js/manage-use.js"></script>
+    <script >
+	
+	var data ={'pageIndex':1};
+	var url = '/manage/datacube/book/stat/count/pageNavJson';	
+	
+	function repeatPage(context){
+		inithighcharts(context);
+	}
+	
+	function initListener(){								
+			var Aicons = document.getElementsByName('pageIndex');
+			var searchBtn = document.getElementById('searchBtn');
+			var status = document.getElementsByName('status');
+			var serializes = document.getElementsByName('serialize');
+			var books =  document.getElementsByName('book');
+			var bookSearch = document.getElementById('bookSearch');
+			var plats = document.getElementsByName('platform_id');			
+			for(var i=0;i<Aicons.length;i++){				
+				Aicons[i].onclick = function (){				
+					execAction(this,url,data);
+					
+				}						
+			}
+			
+			searchBtn.onclick=function (){
+				data={'pageIndex':1};
+				execAction(document.getElementById('forsearch'),url,data);
+			}
+			
+			for(var i=0;i<plats.length;i++){				
+				plats[i].onclick = function (){	
+					
+					execAction(this,url,data);
+					
+				}						
+			}	
+			bookSearch.onkeyup = function(){
+				var vals={'pageIndex':1};
+				megrebook(this,vals);
+				authorRadioEvent(document.getElementsByName('book'));
+			}
+			
+			for(var i=0;i<books.length;i++){				
+				books[i].onclick = function (){				
+					execAction(this,url,data);
+					
+				}						
+			}	
+			
+			
+			
+			for(var i=0;i<status.length;i++){
+				status[i].onclick=function(){
+					execAction(this,url,data);
+				}			
+			}
+			for(var i=0;i<serializes.length;i++){
+				serializes[i].onclick=function(){
+					execAction(this,url,data);
+				}			
+			}
+		}
+	
+	function inithighcharts(context){
+		var xline = new Array();
+		var click_num = new Array();
+		var down_num =  new Array();
+		var read_num = new Array();
+		var comment_num =  new Array();
+		var praise_num =  new Array();
+		
+		for(var index=0;index<context.list.length;index++){
+			var title=context.list[index].book_title+'('+ context.list[index].platform_name +')';
+			xline.push(title);
+			click_num.push(context.list[index].click_num);
+			down_num.push(context.list[index].down_num);
+			read_num.push(context.list[index].read_num);
+			comment_num.push(context.list[index].comment_num);
+			praise_num.push(context.list[index].praise_num);
+		}
+		
+		$('#container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '漫画总统计'
+            },
+            subtitle: {
+                text: 'Source:  www.fanfan.com'
+            },
+			exporting: {
+				type : "application/pdf",
+				filename : "test",
+				url : "http://115.236.23.145:8080/highcharts-export-web/"
+    		},
+            xAxis: {
+                categories: xline
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '数据统计'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table style="width:120px">',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+			
+            series: [{
+                name: "点击量",
+                data: click_num
+    
+            },{
+                name: "下载量",
+                data: down_num
+    
+            },{
+                name: "阅读量",
+                data: read_num
+    
+            },{
+                name: "评论量",
+                data: comment_num
+    
+            },{
+                name: "点赞量",
+                data: praise_num
+    
+            }]
+        });
+		initListener();
+  
+	}
+	
+	
+    $(function () {	
+	
+		var xline = new Array();
+		var click_num = new Array();
+		var down_num =  new Array();
+		var read_num = new Array();
+		var comment_num =  new Array();
+		var praise_num =  new Array();
+		
+		#foreach($item in $!{context.list})	
+		
+			xline.push('$!{item.getBook_title()}'+'('+ '$!{item.getPlatform_name()}' +')');
+			click_num.push($!{item.getClick_num()});
+			down_num.push($!{item.getDown_num()});
+			read_num.push($!{item.getRead_num()});
+			comment_num.push($!{item.getComment_num()});
+			praise_num.push($!{item.getPraise_num()});
+			
+		#end
+	
+        $('#container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '漫画总统计'
+            },
+            subtitle: {
+                text: 'Source:  www.fanfan.com'
+            },
+			exporting: {
+				type : "application/pdf",
+				filename : "test",
+				url : "http://115.236.23.145:8080/highcharts-export-web/"
+    		},
+            xAxis: {
+                categories: xline
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '数据统计'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table style="width:120px">',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+			
+            series: [{
+                name: "点击量",
+                data: click_num
+    
+            },{
+                name: "下载量",
+                data: down_num
+    
+            },{
+                name: "阅读量",
+                data: read_num
+    
+            },{
+                name: "评论量",
+                data: comment_num
+    
+            },{
+                name: "点赞量",
+                data: praise_num
+    
+            }]
+        });
+		initListener();
+    });
+         
+	
+    </script>
+</head>
+
+<body>
+#parse("./layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("./layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">平台统计<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                   <li><a href="/manage/datacube/base/user/stat/day/list">新用户统计</a></li>
+                  
+                </ul>
+              </div>
+				
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">漫画数据<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/datacube/book/stat/count/list">汇总统计</a></li>
+                  <li><a href="/manage/datacube/book/stat/month/list">月度统计</a></li>
+                  <li><a href="/manage/datacube/book/stat/day/list">日常统计</a></li>
+				                
+                  
+                </ul>
+              </div>
+              <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">活动数据 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/datacube/activity/stat/month/list">月度统计</a></li>
+                  
+                  <li class="divider"></li>
+                  
+                </ul>
+              </div>
+              <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">用户数据 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">用户互动</a></li>
+                  <li><a href="#">其他</a></li>                 
+                 <li class="divider"></li>         
+                </ul>
+              </div>
+			  
+			  <!-- /btn-group -->			  
+			  <!-- 
+              <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Info <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                </ul>
+              </div>
+              <div class="btn-group">
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">Warning <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                </ul>
+              </div>
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Danger <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                </ul>
+              </div> 
+			  -->
+            </div>
+			<hr>
+			
+				<div class="row">	
+					
+					<div class="col-md-8">
+						<!--
+					<a type="button" id="status1" href="/manage/book/list?status=1" class="btn #if($!{status}==1) btn-info #else btn-default #end btn-xs">使用</a>
+					<a type="button" id="status0" href="/manage/book/list?status=0" class="btn #if($!{status}==0) btn-info #else btn-default #end btn-xs">未使用</a>
+					-->
+				</div>
+					<div class="col-md-4">
+						<form class="form-inline" role="form" action="/manage/book/list/search" method="post">
+							
+                          <div class="form-group">
+                            <label class="sr-only control-label" for="forvalue">漫画搜索</label>
+                            <input type="text" name="search" class="form-control" id="forsearch" placeholder="漫画名称或者关键字">
+                          </div>						  
+                          <button type="button" id="searchBtn" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>搜索</button>
+                        </form>
+					</div>
+                    </div>
+			<div class="highlight">
+			
+					<div class="thumbnail">
+        				<dl class="dl-horizontal ">
+							<dt>按平台</dt>
+							<dd>
+								#foreach($item in $plats)
+									<label class="radio-inline">
+										<input type="radio" name="platform_id"  value="$!{item.id}" >$!{item.name} </label >
+								#end
+							</dd>
+							
+                            <dt>连载/完结</dt>
+                            <dd>
+								 &nbsp;&nbsp;&nbsp;&nbsp;<label class="radio-inline">
+                            <input type="radio" name="serialize" id="hasFee1" value="1" >
+                                                              连载
+                          </label >&nbsp;&nbsp;&nbsp;&nbsp;
+                          <label class="radio-inline">
+                            <input type="radio" name="serialize" id="hasFee2" value="2">
+                                                             完结
+                          </label> 
+							</dd> 
+						
+                            <dt>
+								漫画搜素																																
+							</dt>
+							<dt>																								
+								<span class="glyphicon glyphicon-search"></span><input type="text" name="search" value="" style="width:60px;" id="bookSearch" >
+                                </input>										
+							</dt>
+                            <dd>
+								<div id="bookView">
+									
+                                </div>
+							</dd>
+							
+                          </dl>
+        			 </div>
+				
+				
+				<div id="container" style="min-width:700px;height:400px"></div>
+				 <div class=" pull-right" id="pageNav">
+						#parse("/layout/pagenav.vm")
+                 </div>
+			</div>	
+				
+            
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+
+
+
+</body>
+</html>

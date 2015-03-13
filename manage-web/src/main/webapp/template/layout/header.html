@@ -1,0 +1,99 @@
+<script src="/manage/static/js/jquery-1.9.1.js"></script>
+<script src="/manage/static/js/jquery.json-2.4.js"></script>
+<script src="/manage/static/bootstrap/js/bootstrap.js"></script>
+<link href="/manage/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+<!-- <link rel="stylesheet" href="../css/font-awesome.min.css">  -->
+
+<script type="text/javascript">
+	function admin_login(){
+		
+		var adata={};
+		adata['login_name']=$('#admin_name').val();
+		adata['password'] = $('#admin_password').val();
+		
+		$.ajax({  
+	        url : "/manage/admin/login",  
+	        type : 'POST',  
+	        data : $.toJSON(adata),  
+	        dataType : 'json',  
+	        contentType : 'application/json',  
+	        success : function(data, status, xhr) {  
+	        	var html = "";
+	        	var alert="";
+ 				if(data!=null && data.success){
+ 					html +="<li><a href='#'>"+data.login_name+"</a></li><li class='btn-group'><a href='#' class='dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-cog'></span>";
+ 					html += "</a><ul class='dropdown-menu pull-right' role='menu' >";
+				           
+					if(data.role_name=="超级管理员"){
+						
+						html +="<li><a href='/manage/admin/user/list'>用户管理</a></li>";						
+						html +="<li><a href='/manage/admin/role/list'>角色管理</a></li>";
+						
+					}
+					html +="<li ><a href='/manage/admin/user/view?id="+data.admin_id+"'>个人设置</a></li>";	
+					html +="<li><a href='#' onclick=\"admin_logout('"+data.admin_id+"')\">退出</a></li></ul></li>";
+					alert += "<div class='alert alert-success fade in'>";
+					alert += "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>";
+					alert += "<strong>"+data.message+"</strong></div>";
+					
+					$('#admin_view').html(html);
+					$('#alert_view').html(alert);
+					
+ 				}else{
+ 					
+ 					alert += "<div class='alert alert-danger fade in'>";
+					alert += "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>";
+					alert += "<strong>"+data.message+"</strong></div>";					
+					$('#alert_view').html(alert);
+ 				}
+ 				
+	        	
+	        },  
+	        Error : function(xhr, error, exception) {  
+	            
+	            alert(exception.toString());  
+	        }  
+	    }); 
+		
+	}	
+	
+	function admin_logout(admin_id){
+		adata={"admin_id":admin_id};
+		$.ajax({  
+	        url : "/manage/admin/logout",  
+	        type : 'POST',  
+	        data : $.toJSON(adata),  
+	        dataType : 'json',  
+	        contentType : 'application/json',  
+	        success : function(data, status, xhr) {  
+	        	var html = "";
+	        	var alert="";
+ 				if(data!=null && data.success){
+ 					
+				    html +="<li ><a href=''#' data-toggle='modal' data-target='#AdminModal'>登录</a></li>";
+				    
+					alert += "<div class='alert alert-success fade in'>";
+					alert += "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>";
+					alert += "<strong>"+data.message+"</strong></div>";
+					
+					$('#admin_view').html(html);
+					$('#alert_view').html(alert);
+					
+ 				}else{
+ 					
+ 					alert += "<div class='alert alert-warring fade in'>";
+					alert += "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>";
+					alert += "<strong>"+data.message+"</strong></div>";					
+					$('#alert_view').html(alert);
+ 				}
+ 				
+	        	
+	        },  
+	        Error : function(xhr, error, exception) {  
+	            
+	            alert(exception.toString());  
+	        }  
+	    }); 
+	}
+</script>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">

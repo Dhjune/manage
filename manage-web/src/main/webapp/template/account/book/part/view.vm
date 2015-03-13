@@ -1,0 +1,229 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+		<link rel="stylesheet" type="text/css" href="/manage/static/kindeditor/themes/default/default.css"/>	
+	<script charset="utf-8" src="/manage/static/kindeditor/kindeditor-min.js"></script>
+	<script charset="utf-8" src="/manage/static/kindeditor/lang/zh_CN.js"></script>
+    <script >
+					
+			KindEditor.ready(function (K) {
+             var editor = K.editor({
+                allowFileManager: true,
+                fileManagerJson: '/manage/ke/filelist',
+                uploadJson: '/manage/ke/upload',
+                urlType: 'domain',
+                
+            });								
+			K('#ImageUrlBtn').click(function() {
+				editor.loadPlugin('image', function() {
+					editor.plugin.imageDialog({						
+						imageUrl :  K('#ImageUrlImg').attr('src'),
+						clickFn : function(url, title, width, height, border, align) {
+							K('#ImageUrlImg').attr('src', url);							
+							K('#headImage').val(url);							
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+		});	
+		
+		function initType(){
+			url = "/manage/book/type/listJson";		
+			$.post(url,function (data){					
+                    if(data != null){					
+					var strs = "";					
+					for(var index = 0;index<data.length;index++){						
+                        strs=strs+"<option value='"+data[index].id +"'>"+data[index].name+"</option>";												
+						}
+						$("#selectType").html(strs);						
+					}
+             },"json");		
+		 }
+		 
+		 function plan_delete(id){
+			 var CarteValue = confirm("确认删除");
+            if(CarteValue){
+				 window.open ('/manage/base/vote/plan/delete?id='+ id  , '_self');
+			}
+		}
+		
+    </script>
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+			<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">漫画家 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/author/create">添加漫画家</a></li>
+                  <li><a href="/manage/book/author/list">漫画家列表</a></li>   
+                </ul>
+              </div>
+				
+			  <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">漫画分类 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/type/create">添加分类</a></li>
+                  <li><a href="/manage/book/type/list">分类列表</a></li>
+                </ul>
+              </div><!-- /btn-group -->
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">漫画资源<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/create">添加漫画</a></li>
+                  <li><a href="/manage/book/list">漫画列表</a></li>
+                  
+                </ul>
+              </div><!-- /btn-group -->
+              
+              
+			   
+            </div>
+			<hr>
+			<p class="text-center text-primary">
+				  
+					<span style="color:blue">漫画章节
+                    </span>
+			</p>
+			<div class="highlight">
+				 <p class="text-left text-primary">
+    					<a href="/manage/book/list" >
+							漫画      
+			          </a>> <a href="/manage/book/view?id=$!{part.book.id}" >
+                          $!{part.book.bookTitle}
+					  </a>
+                        </a>> <a href="/manage/book/part/list?bookId=$!{part.book.id}" >
+							章节管理       
+					  </a>
+    				</p>
+											
+			<div class="row">
+              
+             
+              <div class="col-md-8">
+				    
+				<p class="text-left text-primary">
+					漫画：&nbsp;&nbsp;<span style="color:red">$!{part.book.bookTitle}
+                    </span>
+				</p>
+				
+				<p class="text-left text-primary">
+					章节名称：&nbsp;&nbsp;<span style="color:red">$!{part.partName}
+                    </span>
+				</p>
+					
+				<p class="text-left ">
+					章节序列：&nbsp;&nbsp;<span class="text-primary" >第$!{part.dispOrder}话
+                    </span>
+				</p>
+				
+				
+				<p class="text-left ">
+					本话页数：&nbsp;&nbsp;<span >$!{part.pageNum}
+                    </span>
+				</p>
+				<p class="text-left ">
+				<a href="/manage/book/part/info/list?partId=$!{part.id}" class="btn btn-primary btn-sm" >
+					章节内容
+					
+                </a>&nbsp;&nbsp;&nbsp;&nbsp;
+				
+				<a href="/manage/book/part/update?id=$!{part.id}" class="btn btn-primary btn-sm" >
+					修改
+					
+                </a>&nbsp;&nbsp;&nbsp;&nbsp;
+				#if($!{part.status}==1)
+					<a href="/manage/book/part/upused?id=$!{part.id}&status=0" class="btn btn-primary btn-sm" >
+						不使用					
+					</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				#else
+					<a href="/manage/book/part/upused?id=$!{part.id}&status=1" class="btn btn-primary btn-sm" >
+						使用					
+					</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				#end
+				<!--
+					<a href="/manage/book/part/delete?id=$!{part.id}" class="btn btn-primary btn-sm" >
+						完全删除			
+					</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					-->
+				</p>
+			  </div>
+            </div>
+			<br>													       			
+			<br>				
+			
+				
+			<div class="row">
+				<a href="/manage/base/vote/plan/create?refObjId=$!{part.book.id}&refSubId=$!{part.id}&refType=part" class="btn btn-primary btn-xs" >				
+					添加投票计划				           
+                </a>				
+				<table class="table table-bordered">																			
+				<tr>
+					<th>投票引用</th>
+					<th>平台</th>
+					<th>选项</th>
+					<th>是否在使用</th>
+					<th>详情</th>
+				</tr>				
+				#foreach($item in $!{votePlans})
+                <tr>
+					<td>$!{item.vote.subject}</td>
+					<td>$!{item.platForm.name}</td>
+					<td>
+						#foreach($!{option} in $!{item.vote.options})
+							$!{option.key}:&nbsp;$!{option.subject}&nbsp;&nbsp;
+							
+						#end
+						
+					</td>
+					<td>
+						#if($!{part.votePlanId}==$!{item.id})
+                            <a href="/manage/book/part/changeplan?id=$!{part.id}&votePlanId=0" class="btn btn-primary btn-xs" >不使用</a>
+						#else
+							<a href="/manage/book/part/changeplan?id=$!{part.id}&votePlanId=$!{item.id}" class="btn btn-primary btn-xs" >开始使用</a>
+						#end
+						
+                     </td>
+					<td><div class="btn-group btn-group-xs">
+						<a class="btn" href="/manage/base/vote/plan/update?id=$!{item.id}">修改</a>
+						<a class="btn"  href="#" onclick="plan_delete($!{item.id})">删除</a>
+					</div></td>
+				</tr>
+				#end
+				</table>
+				            								
+                </div>
+				
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+ 
+	 	
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+</div>
+</body>
+</html>

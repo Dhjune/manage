@@ -1,0 +1,273 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("./layout/header.html")   
+	<script type="text/javascript" src="/manage/static/js/jquery.json-2.4.js"></script>
+	<script type="text/javascript" src="/manage/static/highcharts/js/highcharts.js"></script>
+	<script type="text/javascript" src="/manage/static/highcharts/js/modules/exporting.js"></script>
+    
+	<script >
+	
+	function trast(){
+	
+		var data={};
+		data['name'] = 'june';
+		data['email'] = "1245@163.com";
+		var data1= {'name':'june','value':'1245@163.com'}
+		var url = '/manage/datacube/base/stat/jsonmap';
+		 
+		jsonstr = $.toJSON(data1);
+			
+			
+		$.ajax({  
+        url : url,  
+        type : 'POST',  
+        data : jsonstr,  
+        dataType : 'json',  
+        contentType : 'application/json',  
+        success : function(data, status, xhr) {  
+//         Do Anything After get Return data  
+//          $.each(data.payload, function(index){  
+//              $("#result").append("</br>" + data.payload[index].beanStr);  
+//          });  
+        },  
+        Error : function(xhr, error, exception) {  
+            // handle the error.    
+            alert(exception.toString());  
+        }  
+    }); 
+	
+	}
+	
+	
+    $(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Monthly Average Rainfall'
+            },
+            subtitle: {
+                text: 'Source: WorldClimate.com'
+            },
+            xAxis: {
+                categories: [
+                    'Jan',
+                    'Feb',
+                    'Mar',
+                    'Apr',
+                    'May',
+                    'Jun',
+                    'Jul',
+                    'Aug',
+                    'Sep',
+                    'Oct',
+                    'Nov',
+                    'Dec'
+                ]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Rainfall (mm)'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: '漫画',
+                data: [1149.9, 1171.5, 11106.4, 11129.2, 11144.0, 11176.0, 11135.6, 11148.5, 11216.4, 11194.1, 1195.6, 1154.4]
+    
+            }]
+        });
+    });
+       
+  
+               
+  
+      
+		function test(){
+		
+			alert("asdfgseth");
+		}
+		function showtable(){
+			alert("onclick");
+    		$('#container').highcharts({
+                    title: {
+                        text: '欢迎来到数据魔方',
+                        x: -20 //center
+                    },
+                    subtitle: {
+                        text: 'Source: fanfan.com',
+                        x: -20
+                    },
+    				exporting: {
+    					type : "application/pdf",
+    					filename : "test",
+    					url : "http://115.236.23.145:8080/highcharts-export-web/"
+    				},
+                    xAxis: {
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Temperature (°C)'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                    },
+                    tooltip: {
+                        valueSuffix: '°C'
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'right',
+                        verticalAlign: 'middle',
+                        borderWidth: 0
+                    },
+                    series: [{
+                        name: 'Tokyo',
+                        data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+                    }, {
+                        name: 'New York',
+                        data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+                    }, {
+                        name: 'Berlin',
+                        data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+                    }, {
+                        name: 'London',
+                        data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+                    }]
+                });
+    	}
+    </script>
+</head>
+
+<body>
+#parse("./layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("./layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">平台统计<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                   <li><a href="/manage/datacube/base/user/stat/day/list">新用户统计</a></li>
+                  
+                </ul>
+              </div>
+				
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">漫画数据<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/datacube/book/stat/count/list">汇总统计</a></li>
+                  <li><a href="/manage/datacube/book/stat/month/list">月度统计</a></li>
+                  <li><a href="/manage/datacube/book/stat/day/list">日常统计</a></li>
+				                
+                  
+                </ul>
+              </div>
+              <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">活动数据 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/datacube/activity/stat/month/list">月度统计</a></li>
+                  
+                  <li class="divider"></li>
+                  
+                </ul>
+              </div>
+              <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">用户数据 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">用户互动</a></li>
+                  <li><a href="#">其他</a></li>                 
+                 <li class="divider"></li>         
+                </ul>
+              </div>
+			  
+			  <!-- /btn-group -->			  
+			  <!-- 
+              <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Info <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                </ul>
+              </div>
+              <div class="btn-group">
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">Warning <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                </ul>
+              </div>
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Danger <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                </ul>
+              </div> 
+			  -->
+            </div>
+			<hr>
+			<div class="highlight">
+				<div id="container" style="min-width:700px;height:400px"></div>
+				<a class="btn btn-info btn-sm " onclick="showtable()">查看线性表</a>	
+				<a class="btn btn-info btn-sm " onclick="trast()">测试</a>	
+			</div>	
+				
+            
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+
+
+
+</body>
+</html>

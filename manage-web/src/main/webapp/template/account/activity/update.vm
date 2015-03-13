@@ -1,0 +1,230 @@
+<html >
+<head>
+	
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+	<link rel="stylesheet" type="text/css" href="/manage/static/kindeditor/themes/default/default.css"/>	
+	<script charset="utf-8" src="/manage/static/kindeditor/kindeditor.js"></script>
+	<script charset="utf-8" src="/manage/static/kindeditor/lang/zh_CN.js"></script>
+	<script charset="utf-8" src="/manage/static/datepicker/WdatePicker.js"></script>
+	<script>
+	
+			KindEditor.ready(function (K) {
+             var editor = K.editor({
+                allowFileManager: true,
+                fileManagerJson: '/manage/ke/filelist',
+                uploadJson: '/manage/ke/upload',
+                urlType: 'domain',
+                
+            });								
+			
+			
+			K('#ImageUrlBtn').click(function() {
+				editor.loadPlugin('image', function() {
+					editor.plugin.imageDialog({						
+						imageUrl :  K('#ImageUrlImg').attr('src'),
+						clickFn : function(url, title, width, height, border, align) {
+							K('#ImageUrlImg').attr('src', url);							
+							K('#imageUrl').val(url);							
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+			
+			
+		});		
+				
+		
+	</script>			
+    <style type="text/css">
+        .form_settings
+        {
+                width: 80%;               
+        }
+        </style
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">活动管理<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="/manage/activity/list">活动列表</a></li>
+                     <li><a href="/manage/activity/create">添加活动</a></li>
+					 <li><a href="#">待续...</a></li>
+                     </ul>
+                 </div>
+				 
+				 <div class="btn-group">
+                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">用户互动<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="/manage/activity/apply/list">查看列表</a></li>
+                     <li><a href="#">待续...</a></li>
+                     </ul>
+                 </div>
+			   
+            </div>
+			<hr>
+			<p class="text-center text-primary">
+				<span style="color:blue">活动修改
+                </span>
+			</p>
+			<div class="highlight">
+				 <p class="text-left text-primary">
+    					<a href="/manage/activity/list" >
+                                  活动    
+						</a>><a href="/manage/activity/view?id=$!{acty.id}" >
+                                  $!{acty.subject}       
+					    </a>              
+    				</p>
+			</p>			
+			  <div class="row">	
+				
+				
+			  <br>				
+			      <form role="form" class="form-horizontal" method="post" action="/manage/activity/update" >
+					<table class="table table-bordered">
+						<tr><td>
+					<input name="id" type="hidden"  value="$!{acty.id}"/>
+					<input type="hidden" name="updateUser" value="$!{admin.login_name}" />
+					  <div class="form-group">
+                        <label for="forName" class="col-sm-2 control-label">主题</label>
+                        <div class="col-sm-4">
+                          <input type="text" name="subject" class="form-control" id="subject" placeholder="" value="$!{acty.subject}">
+                        </div>
+                       </div>
+					   
+					  <div class="form-group">
+                         <label for="forHeight" class="col-sm-2 control-label">平台</label>
+                        <div class="col-sm-4">
+                         <select name="platId">	
+							
+						  #foreach($plat in $!{plats})
+							  
+                              <option value="${plat.id}" #if($!{acty.platForm.id}==${plat.id}) selected #end >${plat.name}</option>                        
+						  #end
+                        </select>
+                        </div>
+                      </div>
+					   					  				  
+					  <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">类别<span id="forlinkEmail" style="color:red"> </span></label>
+						 
+						  <label class="radio-inline">
+                            <input type="radio" name="kind" id="kind1" value="1" #if($!{acty.kind}==1) checked #end>
+                                                              漫画行
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="kind" id="kind2" value="2" #if($!{acty.kind}==2) checked #end>
+                                                              新星杯
+                          </label>   
+						  
+						  <label class="radio-inline">
+                            <input type="radio" name="kind" id="kind3" value="3" #if($!{acty.kind}==3) checked #end>
+								漫画创意部落                              
+                          </label> 
+						  
+                       </div>
+					  
+					  
+					  <div class="form-group">
+                        <label for="forBriefIntro" class="col-sm-2 control-label">简介</label>
+                        <div class="col-sm-6">
+                          <textarea name="Intro" id="Intro" class="form-control " rows="4">$!{acty.intro}</textarea>
+                        </div>
+                      </div>
+					  
+					  <div class="form-group">
+                          <label for="forbriefIntro" class="col-sm-2 control-label">活动图片</label>
+						  <div class="col-sm-10">
+                          	<button type="button" class="btn btn-mini" id="ImageUrlBtn">选择图片
+                            </button>
+                            <br>
+                            <img id="ImageUrlImg" name="ImageUrlImg" src="$!{acty.imageUrl}" style="width:200px;height: 200px;"/>
+                            <input type="hidden" name="imageUrl" id="imageUrl" value="$!{acty.imageUrl}">
+						   </div>
+                        </div>
+						
+						<div class="form-group">
+                            <label for="forName" class="col-sm-2 control-label">活动链接</label>
+                            <div class="col-sm-4">
+                              <input type="text" name="showUrl" class="form-control" id="showUrl" placeholder="" value="$!{acty.showUrl}">
+                            </div>
+                       </div>
+					   					  					   
+					   <div class="form-group">
+                            <label for="forName" class="col-sm-2 control-label">活动时间</label>
+                            <div class="col-xs-3">
+                               <input type="text" name="startStr" class="form-control input-sm" id="startTime" value="$!{acty.startTime}" placeholder="开始时间" onClick="WdatePicker()">
+							  <input type="text" name="endStr" class="form-control input-sm" id="endTime" value="$!{acty.endTime}" placeholder="结束时间" onClick="WdatePicker()">
+                            </div>
+                       </div>
+						
+					   <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">是否热门<span id="forlinkEmail" style="color:red"> </span></label>
+						 
+						  <label class="radio-inline">
+                            <input type="radio" name="hotFlag" id="hotFlag1" value="1" #if($!{acty.hotFlag}==1) checked #end>
+								是
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="hotFlag" id="hotFlag0" value="0" #if($!{acty.hotFlag}==0) checked #end>
+								否
+                          </label>                        
+                       </div>
+					   					   					   
+					   <div class="form-group">
+                         <label for="forHeight" class="col-sm-2 control-label">活动状态</label>
+                        <div class="col-sm-4" >
+                         <select class="officialFlag" name="status">						 
+                          <option value="0" #if($!{acty.status}==0) selected #end>未开始</option>
+                          <option value="1" #if($!{acty.status}==1) selected #end>进行中</option>
+						  <option value="2" #if($!{acty.status}==2) selected #end>已结束</option>						 
+                        </select>
+                        </div>
+                      </div>	
+					  
+					   <div class="form-group">
+                           <div class="col-sm-offset-2 col-sm-10">
+                              <button type="submit" class="btn btn-default"> 提交</button>
+                           </div>
+                       </div>
+						  
+					    </td></tr>
+			           </table>	
+                  </form>
+											   							
+			  </div>
+			  
+			</div>	
+			
+			
+			
+       </div>
+	   
+      </div>  
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

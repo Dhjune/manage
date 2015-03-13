@@ -1,0 +1,232 @@
+<html >
+<head>
+	
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")  
+	<script charset="utf-8" src="/manage/static/datepicker/WdatePicker.js"></script>
+	<script>
+					
+	</script>			
+    <style type="text/css">
+        .form_settings
+        {
+                width: 80%;               
+        }
+        </style
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">APPLICATION<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/app/create">app添加</a></li>
+                  <li><a href="/manage/base/app/list">app列表</a></li>              
+                </ul>
+              </div>
+			
+				<div class="btn-group">
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">平台管理 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/platform/create">添加平台</a></li>
+                  <li><a href="/manage/base/platform/list">平台列表</a></li>              
+                </ul>
+              </div>
+				
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">翻译团队 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/transteam/create">添加团队</a></li>
+                  <li><a href="/manage/base/transteam/list">团队列表</a></li>               
+                </ul>
+              </div><!-- /btn-group -->
+              			  
+			  <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">投票计划 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">			
+                  <li><a href="/manage/base/vote/create">新增</a></li>
+                  <li><a href="/manage/base/vote/list">列表</a></li>    
+				  <li><a href="#">其他</a></li> 
+				  
+                </ul>
+              </div>
+			   
+            </div>
+			<hr>
+			<p class="text-center text-primary">
+				<span style="color:blue">添加APP
+                </span>
+			</p>
+			<div class="highlight">
+				<p class="text-left text-primary">
+					<a href="/manage/base/app/list" >
+                                  App列表     
+					</a>><a href="/manage/base/app/view?id=$!{vote.id}" >
+                      $!{app.appName}     
+					 </a>                          				                   
+				</p>				
+			  <div class="row">
+			               		  
+			  <br>
+				
+			      <form role="form" class="form-horizontal" method="post" action="/manage/base/app/update" >
+					<table class="table table-bordered">
+						<tr><td>
+								
+					   <input type="hidden" name="token" value="$!{token}"/>
+					   <input type="hidden" name="id" value="$!{app.id}"/>
+					 
+					   <div class="form-group">
+                        <label for="forpartName" class="col-sm-2 control-label">app名称</label>
+                        <div class="col-sm-5">
+                          <input type="text" name="appName" class="form-control" id="appName" value="$!{app.appName}" placeholder="">
+                        </div>
+                       </div>
+					   
+					   <div class="form-group">
+                        <label for="forpartName" class="col-sm-2 control-label">app Key</label>
+                        <div class="col-sm-5">
+                          <input type="text" name="appKey" class="form-control" id="appKey" value="$!{app.appKey}" placeholder="">
+                        </div>		
+                       </div>
+					   
+					   <div class="form-group">
+                        <label for="forpartName" class="col-sm-2 control-label">版本</label>
+                        <div class="col-sm-5">
+                          <input type="text"  name="appVersion" class="form-control" id="appVersion" value="$!{app.appVersion}" placeholder="">
+                        </div>		
+                       </div>
+					   
+					   <div class="form-group">
+                        <label for="forpartName" class="col-sm-2 control-label"> app大小</label>
+                        <div class="col-sm-5">
+                          <input type="text"  name="appFileSize" class="form-control" id="appFileSize" value="0" value="$!{app.appFileSize}" placeholder="">
+                        </div>		
+                       </div>
+					   
+					   <div class="form-group">
+                        <label for="forpartName" class="col-sm-2 control-label"> app链接</label>
+                        <div class="col-sm-5">
+                          <input type="text"  name="appUrl" class="form-control" id="appUrl" value="$!{app.appUrl}" placeholder="可以不填">
+                        </div>		
+                       </div>
+					   
+					   
+					    <div class="form-group">
+                        <label for="forpartName" class="col-sm-2 control-label">发布平台</label>
+                        <div class="col-sm-5">
+                          <input type="text"  name="pubPlat" class="form-control" id="pubPlat" value="$!{app.pubPlat}" placeholder="">
+                        </div>				
+                       </div>
+					   
+					   <div class="form-group">
+                        <label for="forpartName" class="col-sm-2 control-label">发布ID</label>
+                        <div class="col-sm-5">
+                          <input type="text"  name="pubId" class="form-control" id="pubId" value="$!{app.pubId}" placeholder="">
+                        </div>		
+                       </div>
+					   
+					   	<div class="form-group">
+                        <label for="forpartName" class="col-sm-2 control-label">发布时间</label>
+                        <div class="col-sm-5">
+                         <input type="text" name="pubTimeStr" class="form-control input-sm" id="pubTimeStr" placeholder="选择时间" value="$!{app.pubTime}" onClick="WdatePicker()">
+                        </div>		
+                       </div>	   
+					   
+					    <div class="form-group">
+                         <label for="forHeight" class="col-sm-2 control-label">平台选择</label>
+                        <div class="col-sm-5">
+                         <select class="col-sm-4" name="platId" id="platId" >
+							 
+						    #foreach($platform in $!{platforms})
+                              <option value="$!{platform.id}" #if($!{app.platId} == $!{platform.id}) selected #end >$!{platform.name}</option>                        
+							#end
+							
+                        </select>
+                        </div>
+                      </div>
+					  
+					  
+					   					  					   						  
+					  <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">版本类型<span id="forlinkEmail" style="color:red"> </span></label>	
+						  <div class="col-sm-5">
+						  <label class="radio-inline">		
+                            <input type="radio" name="versionType" id="versionType0" value="0" #if($!{app.versionType} == 0) checked #end >
+                                                            内测版
+                          </label> 
+						   <label class="radio-inline">
+                            <input type="radio" name="versionType" id="versionType1" value="1" #if($!{app.versionType} == 1) checked #end>
+								公测版
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="versionType" id="versionType2" value="2" #if($!{app.versionType} == 2) checked #end>
+							    正式版
+                          </label>  
+						  </div>
+                       </div>
+					  
+					  <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">更新类型<span id="forlinkEmail" style="color:red"> </span></label>
+						  <div class="col-sm-5">
+						  <label class="radio-inline">		
+                            <input type="radio" name="updateType" id="updateType0" value="0" #if($!{app.updateType} == 0) checked #end>
+                                                            不提示更新
+                          </label> 
+						   <label class="radio-inline">
+                            <input type="radio" name="updateType" id="updateType1" value="1" #if($!{app.updateType} == 1) checked #end>
+                                                              提示更新
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="updateType" id="updateType2" value="2" #if($!{app.updateType} == 2) checked #end>
+							     强制更新 
+                          </label>    
+						  </div>
+                       </div>
+					   
+					   <div class="form-group">
+                           <div class="col-sm-offset-2 col-sm-10">
+                              <button type="submit" class="btn btn-default"> 提交</button>
+                           </div>
+                       </div>
+						  
+					    </td></tr>
+			           </table>	
+                  </form>
+				
+				
+			   							
+			  </div>
+			  
+			</div>	
+			
+			
+			
+       </div>
+	   
+      </div>  
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

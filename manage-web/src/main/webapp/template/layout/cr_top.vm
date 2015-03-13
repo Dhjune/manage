@@ -1,0 +1,104 @@
+<div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+				
+				<a class="active navbar-brand" href="#">Manage</a>
+        </div>
+        <div class="collapse navbar-collapse">
+			                                  
+            <ul class="nav navbar-nav">
+				
+                <li class="active dropdown ">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">版权管理<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="/manage/copyright/book/create" >作品添加</a>
+						</li>
+                      <li><a href="/manage/copyright/list" >作品列表</a></li>
+                     
+                    </ul>
+                  </li>
+            </ul>
+									
+			<ul class="nav navbar-nav pull-right " id="admin_view">
+				
+				#if($!{admin})
+				<li >
+					<a href="#">$!{admin.login_name}
+					</a>
+                </li>
+				<li class="btn-group active">            
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<span class="glyphicon glyphicon-cog"></span>
+				</a>
+				<ul class="dropdown-menu pull-right" role="menu" >
+					
+				#if($!{admin.role_name} == "超级管理员")
+					<li ><a href="/manage/admin/user/list">用户管理</a></li>
+					<li ><a href="/manage/admin/role/list">角色管理</a></li>
+				#end	
+				
+				<!-- <li ><a href="/manage/admin/user/view?id=$!{admin.admin_id}">个人设置</a></li> -->			
+				<li><a href="#" onclick="admin_logout('$!{admin.admin_id}')">退出</a></li>
+              </ul>
+			  
+				</li>			
+				
+			#else
+				<li >
+				<a href="#" data-toggle="modal" data-target="#AdminModal">登录</a>
+				</li>
+    			
+			#end 	
+				         
+            
+            </ul>
+			
+        </div><!-- /.nav-collapse -->
+			     
+    </div><!-- /.container -->
+</div><!-- /.navbar -->
+	 <div class="pull-right" style="width:160px" id="alert_view">
+     </div>
+
+   <div class="modal fade" id="AdminModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Admin登录</h4>
+          </div>
+          <div class="modal-body form-horizontal">
+			
+				<div class="form-group">
+                    <label class="col-sm-2 control-label"><span class="glyphicon glyphicon-user"></span></label>
+                    <div class="col-sm-6">
+                          <input type="text" class="form-control" name="loginName" id="admin_name" placeholder="LoginName">
+                    </div>
+                  </div>
+				
+                
+				
+				<div class="form-group" >
+                     <label for="inputPassword" class="col-sm-2 control-label"><span class="glyphicon glyphicon-lock"></span></label>
+                    <div class="col-sm-6">
+                      <input type="password" class="form-control" name="password" id="admin_password" placeholder="Password">
+                    </div>
+                </div>
+					                        
+      		 
+				
+				
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button"  class="btn btn-primary" data-dismiss="modal" onclick="admin_login()">登录</button>
+          </div>
+        </div>
+      </div>
+    </div>

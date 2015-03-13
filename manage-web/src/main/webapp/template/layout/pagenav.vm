@@ -1,0 +1,47 @@
+
+#set($pageCount = $Integer.parseInt( $!{context.pageCount}))
+
+#if( $!{context.pageCount} >= 1)	
+    <div class=" pull-right">
+        <ul class="pagination pagination-sm">
+            <li><a>共$!{context.total}条记录</a></li>
+			#if( $!{context.prev}> 0)           
+                <li >
+                    <a href="$!{context.prevUrl}">上页</a>
+                </li>
+            #else
+                <li class="disabled">
+                    <a class="">上页</a>
+                </li>
+			#end
+							
+			#foreach($item in ${context.showitems})				
+                #if($!{item.active})
+                    <li class="active">
+                        <a>$!{item.index}</a>
+                    </li >
+                #else
+                    <li>
+                        <a href="$!{item.url}">$!{item.index}</a>
+                    </li>
+                #end
+			#end
+					
+			#if( $!{context.next} > 0)           
+                <li>
+                    <a href="$!{context.nextUrl}">下页</a>
+                </li>
+            #else
+                <li class="disabled">
+                    <a class="">下页</a>
+                </li>
+            #end
+        </ul>
+    </div>
+#else
+    <div class=" pull-right">
+        <ul class="pagination">
+            <li><a >共$!{context.total}条记录</a></li>
+        </ul>
+    </div>
+#end

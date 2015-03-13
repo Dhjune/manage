@@ -1,0 +1,783 @@
+<html >
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("./layout/header.html")   
+	<link rel="stylesheet" type="text/css" href="/manage/static/kindeditor/themes/default/default.css"/>	
+    <script charset="utf-8" src="/manage/static/kindeditor/kindeditor.js"></script>
+	<script charset="utf-8" src="/manage/static/kindeditor/lang/zh_CN.js"></script>
+	<style type="text/css">
+		table{
+			  font-size:12px;
+		}
+		th,td{
+			vertical-align:middle; 
+			text-align:center;
+		}
+    </style>
+	<script >
+		
+		function author_search(){
+			var au_name=$('#author_name').val();
+			var params={'authorName':au_name};
+			
+			$.post("/manage/copyright/author/search",params,function (data){
+                    if(data != null){	
+						$('#authorId').val(data.id);
+						$('#nativePlace').val(data.nativePlace);
+						$('#bankAddress').val(data.bankAddress);
+						$('#bankAccount').val(data.bankAccount);
+						$('#email').val(data.email);
+						$('#card').val(data.card);
+						$('#address').val(data.address);
+						$('#tele').val(data.tele);
+						$('#cardImage').val(data.cardImage);
+						$('#cardImageUrl').attr('src',data.cardImage);
+						
+					}
+                },"json");
+		}
+		
+		KindEditor.ready(function (K) {
+             var editor = K.editor({
+                allowFileManager: true,
+                fileManagerJson: '/manage/ke/filelist',
+                uploadJson: '/manage/ke/upload',
+                urlType: 'domain',                
+            });						
+			
+			K('#coverBtn1').click(function() {
+				editor.loadPlugin('image', function() {
+					editor.plugin.imageDialog({						
+						imageUrl :  K('#coverImage1Url').attr('src'),
+						clickFn : function(url, title, width, height, border, align) {
+							K('#coverImage1Url').attr('src',url);	
+							
+							K('#coverImageOne').val(url);							
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+			
+			K('#fileUrlBtn').click(function() {
+				editor.loadPlugin('insertfile', function() {
+					editor.plugin.fileDialog({						
+						fileUrl :  K('#savePath').val(),					
+						clickFn : function(data) {														
+							
+							//K('#imageUrl').val(data.path);
+							K('#savePath').val(data.title);
+							
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+			
+			
+			K('#coverBtn2').click(function() {
+				editor.loadPlugin('image', function() {
+					editor.plugin.imageDialog({						
+						imageUrl :  K('#coverImage2Url').attr('src'),
+						clickFn : function(url, title, width, height, border, align) {
+							K('#coverImage2Url').attr('src', url);							
+							K('#coverImageTwo').val(url);							
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+			
+			K('#cardImgBtn').click(function() {
+				editor.loadPlugin('image', function() {
+					editor.plugin.imageDialog({						
+						imageUrl :  K('#cardImageUrl').attr('src'),
+						clickFn : function(url, title, width, height, border, align) {
+							K('#cardImageUrl').attr('src', url);							
+							K('#cardImage').val(url);							
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+			
+		});	
+		
+		function remove_disabled(fieldsetStr,sv_btn){	
+		
+			var Idstr = "#"+fieldsetStr;
+			$(Idstr).removeAttr("disabled");
+			$("#"+sv_btn).removeAttr("disabled");
+															
+		}
+		
+		function save_form(formStr,fieldsetStr){
+			       		
+						
+        	jQuery.ajax({
+       	 	url: $("#"+formStr).attr("action"),
+       	 	data: $("#"+formStr).serialize(),
+        	type: "POST",
+			dataType : 'json', 
+       	 	beforeSend: function()
+        	{  
+           	     //$('#submitButton').hide();
+                 //$('#editRealMsgImg').show();
+            },
+            success: function(data){
+				
+				if(data!=null){
+					alert(data.message);
+					if(data.authorId !=null){					
+						//alert(data.authorId);
+						$('#authorId').val(data.authorId);
+						
+					}					
+				}
+				
+				}
+            });
+                  
+			$("#"+fieldsetStr).attr("disabled", "disabled");			
+		}
+		
+		function crPay_delete(id,bookId){
+			 var CarteValue = confirm("删除这条支付信息？");
+            if(CarteValue){
+				 window.open ('/manage/copyright/pay/delete?id='+ id+'&bookId='+bookId , '_self');
+			}			
+		}
+		
+		function crInfo_delete(id,bookId){
+			var CarteValue = confirm("删除这条版权信息？");
+            if(CarteValue){
+				 window.open ('/manage/copyright/info/delete?id='+ id+'&bookId='+bookId , '_self');
+			}
+			
+		}
+		
+    </script>
+    
+</head>
+
+<body>
+#parse("./layout/cr_top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	
+				<div class="col-sm-1" style="border-style: solid;border-width: thin;">
+					
+					 <div class="list-group">
+            
+						<a href="#book_1" class="list-group-item">作品信息</a>
+						
+						<a href="#author_1" class="list-group-item">作者信息</a>
+						
+						<a href="#crinfo_1" class="list-group-item">版权明细</a>
+						
+						<a href="#payinfo_1" class="list-group-item">支付信息</a>
+						
+						<a href="#input_1" class="list-group-item">存档录入</a>
+                                
+					 </div>
+					
+                </div>
+			
+				<div class="col-sm-11" style="border-style: solid;border-width: thin;">
+                      <div class="panel-body" id="book_1" style="border-style: solid;border-width: thin;">
+						<p class="text-right">		
+                					#if($!{admin.role_name}=="版权超级管理员A" || $!{admin.role_name}=="版权普通管理员C")
+										
+											<button type="button" class="btn btn-primary btn-xs" onclick="remove_disabled('book_field','book_a')" href="#">修改</button>
+											<button type="button" id="book_a" class="btn btn-primary btn-xs" onclick="save_form('book_form','book_field')" href="#" disabled>保存</button>
+                					#else
+                							
+										
+                					#end
+                				</p>
+						<form role="form" id="book_form" action="/manage/copyright/book/update">
+							<fieldset disabled  id="book_field">
+							 <div class="row">
+								<div class="col-md-1">
+                                </div>
+                				<input type="hidden" name="id" value="$!{crBook.id}"/>
+								<input type="hidden" name="status" value="$!{crBook.status}"/>
+                				<div class="col-md-4">
+									<div class="form-group">
+                                      <label for="forbriefIntro" class="control-label"></label>
+            						  
+                                      	<button type="button" class="btn btn-mini" id="coverBtn1">选择图片
+                                        </button>
+                                        <br>
+                                        <img id="coverImage1Url" class="img-thumbnail" alt="封面图1" name="coverImage1Url" src="$!{crBook.coverImageOne}" style="width:240px;height:320px"/>
+                                        <input type="hidden" name="coverImageOne" id="coverImageOne" value="$!{crBook.coverImageOne}">
+            								<br/><span class="help-inline">建议图片大小为:315X220</span>
+            						   
+                                     </div>
+                				</div>
+								<!--
+                				<div class="col-md-3">
+									 <div class="form-group">
+                                      <label for="forbriefIntro" class=" control-label"></label>
+            						 
+                                      	<button type="button" class="btn btn-mini" id="coverBtn2">选择图片
+                                        </button>
+                                        <br>
+                                        <img id="coverImage2Url" class="img-thumbnail" alt="封面图2" name="coverImage2Url" src="$!{crBook.coverImageTwo}" style="height:320px;width:240px"/>
+                                        <input type="hidden" name="coverImageTwo" id="coverImageTwo" value="$!{crBook.coverImageTwo}">
+            								<br/><span class="help-inline">建议图片大小为:320X240</span>
+            						   
+                                     </div>
+                					
+                				</div>
+								-->
+                				<div class="col-md-6">
+									<div class="row">
+									<div class="form-group col-sm-5">
+                                      <label for="disabledTextInput">作品分类</label>
+									  
+									  <input type="text" name="bookType" id="bookType" class="form-control" placeholder="" value="$!{crBook.bookType}">
+									
+                                    </div>
+									<div class="form-group col-sm-5">
+                                      <label for="disabledTextInput">作品来源</label>
+									  
+									  <input type="text" name="country" id="country" class="form-control" placeholder="" value="$!{crBook.country}">
+									
+                                    </div>
+									</div>
+									
+									<div class="row">
+									<div class="form-group col-sm-5">
+                                      <label for="disabledTextInput">作品名称</label>
+									  
+									  <input type="text" name="bookName" id="bookName" class="form-control" placeholder="" value="$!{crBook.bookName}">
+									
+                                    </div>
+									<div class="form-group col-sm-5">
+                                      <label for="disabledTextInput">篇幅:(长篇页数)</label>
+									  
+									  <input type="text" name="length" id="length" class="form-control" placeholder="" value="$!{crBook.length}">
+									
+                                    </div>
+									</div>
+									
+									<div class="row">
+									<div class="form-group col-sm-5">
+                                      <label for="disabledTextInput">作者笔名</label>
+									  
+									  <input type="text" name="penName" id="penName" class="form-control" placeholder="" value="$!{crBook.penName}">
+									
+                                    </div>
+									<div class="form-group col-sm-5">
+                                      <label for="disabledTextInput">作品颜色</label>
+									  
+									  <input type="text" name="color" id="color" class="form-control" placeholder="" value="$!{crBook.color}">
+									
+                                    </div>
+									</div>
+									
+									<div class="row">
+									<div class="form-group col-sm-5">
+                                      <label for="disabledTextInput">创作时间</label>
+									  
+									  <input type="text" name="produceTime" id="produceTime" class="form-control" placeholder="" value="$!{crBook.produceTime}">
+									
+                                    </div>
+									<div class="form-group col-sm-5">
+                                      <label for="disabledTextInput">更新状态</label>
+									  
+									  <input type="text" name="updateStatus" id="updateStatus" class="form-control" placeholder="" value="$!{crBook.updateStatus}">
+									
+                                    </div>
+									</div>
+									
+									<div class="row">
+    									<div class="form-group col-sm-10">
+                                          <label for="disabledTextInput">FTP存储地址</label>
+    									  
+    									  <input type="text" name="ftpPath" id="ftpPath" class="form-control" placeholder="" value="$!{crBook.ftpPath}">
+    									
+                                        </div>
+									</div>
+	
+                				</div>
+							</div>
+							
+							<div class="col-md-10 form-group">
+                                      <label for="disabledTextInput">简介</label>
+									  <textarea class="form-control" name="briefIntro" rows="7">$!{crBook.briefIntro}</textarea>
+                            </div>		 
+							<div class="col-md-10 form-group">
+                                      <label for="disabledTextInput">备注</label>
+									  <textarea class="form-control" name="remarks" rows="7">$!{crBook.remarks}</textarea>
+                            </div>	
+							
+						   </fieldset>
+						</form>
+						
+                      </div>
+                 
+                      <div class="panel-body" id="author_1" style="border-style: solid;border-width: thin;">
+						<p class="text-right">
+        					#if($!{admin.role_name}=="版权超级管理员A")
+									<button type="button" class="btn btn-primary btn-xs" onclick="remove_disabled('author_field','author_a')" >修改</button>
+									<button type="button" class="btn btn-primary btn-xs" id="author_a" onclick="save_form('author_form','author_field')"  disabled>保存</button>
+        					#else
+        							
+								
+        					#end
+        				</p>
+						#if($!{admin.role_name}=="版权超级管理员A" || $!{admin.role_name}=="版权超级管理员B" )
+						<form role="form" id="author_form" action="/manage/copyright/author/saveOrupdate">
+							<fieldset disabled id="author_field">
+							#if($!{crAuthor})
+								
+								<input type="hidden" id="authorId" name="id" value="$!{crAuthor.id}"/>
+								<input type="hidden" name="status" value="$!{crAuthor.status}"/>
+							#else
+								<input type="hidden" id="authorId" name="id" value="0"/>
+							#end
+							<input type="hidden" name="bookId" value="$!{crBook.id}"/>
+							
+							
+							 <div class="row">               				
+                				<div class="col-md-3">
+									 <div class="form-group">
+                                      <label for="forbriefIntro" class=" control-label"></label>
+            						 
+                                      	<button type="button" class="btn btn-mini" id="cardImgBtn">选择图片
+                                        </button>
+                                        <br>
+                                        <img id="cardImageUrl" class="img-thumbnail" alt="身份证扫描件" name="cardImageUrl" src="$!{crAuthor.cardImage}" style="width:200px;height:240px"/>
+										<br>
+                                        <input type="hidden" name="cardImage" id="cardImage" value="$!{crAuthor.cardImage}">
+            								<br><span class="help-inline">建议图片大小为:260X196</span>
+            						   
+                                     </div>
+									
+										
+                				</div>
+                				
+                				<div class="col-md-8">
+									<div class="row">
+										
+									<div class="form-group col-sm-3">
+                                      <label for="disabledTextInput">作者姓名</label>
+								
+									  <input type="text" name="name" id="author_name" class="form-control" onblur="author_search()" placeholder="" value="$!{crAuthor.name}">
+									
+                                    </div>
+									<div class="form-group col-sm-3">
+                                      <label for="disabledTextInput">籍贯</label>
+									  
+									  <input type="text" name="nativePlace" id="nativePlace" class="form-control" placeholder="" value="$!{crAuthor.nativePlace}">
+									
+                                    </div>
+									<div class="form-group col-sm-6">
+                                      <label for="disabledTextInput">身份证号码</label>
+									  
+									  <input type="text" name="card" id="card" class="form-control" placeholder="" value="$!{crAuthor.card}">
+									
+                                    </div>
+									</div>
+									
+									<div class="row">
+									<div class="form-group col-sm-10">
+                                      <label for="disabledTextInput">联系地址</label>
+									  
+									  <input type="text" name="address" id="address" class="form-control" placeholder="" value="$!{crAuthor.address}">
+									
+                                    </div>
+									
+									</div>
+									
+									<div class="row">
+									<div class="form-group col-sm-6">
+                                      <label for="disabledTextInput">联系电话</label>
+									  
+									  <input type="text" name="tele" id="tele" class="form-control" value="$!{crAuthor.tele}" placeholder="">
+									
+                                    </div>
+									<div class="form-group col-sm-6">
+                                      <label for="disabledTextInput">常用邮箱</label>
+									  
+									  <input type="text" name="email" id="email" class="form-control" value="$!{crAuthor.email}" placeholder="">
+									
+                                    </div>
+									</div>
+									
+									<div class="row">
+									<div class="form-group col-sm-6">
+                                      <label for="disabledTextInput">开户行</label>
+									  
+									  <input type="text" name="bankAddress" id="bankAddress" class="form-control" placeholder="$!{crAuthor.bankAddress}">
+									
+                                    </div>
+									<div class="form-group col-sm-6">
+                                      <label for="disabledTextInput">开户行账号</label>
+									  
+									  <input type="text" name="bankAccount" id="bankAccount" class="form-control" placeholder="$!{crAuthor.bankAccount}">
+									
+                                    </div>
+									</div>
+	
+                				</div>
+							</div>
+								  
+						   </fieldset>
+						</form>
+						#end
+                      </div>
+					<div class="panel-body" id="crinfo_1" style="border-style: solid;border-width: thin;">
+					#if($!{admin.role_name}=="版权超级管理员A" || $!{admin.role_name}=="版权超级管理员B" )	
+						<p class="text-left">
+							版权明细
+                        </p>
+						#if($!{admin.role_name}=="版权超级管理员A")
+										
+							<p class="text-right">
+							<a href="/manage/copyright/info/create?bookId=$!{crBook.id}" class="btn btn-info btn-xs">添加</a>
+                        </p>
+                					              																	
+                		#end
+						<table class="table table-bordered" style="word-break:break-all; word-wrap:break-word;">
+                        <tr >
+							<th >
+								序号
+                            </th>
+                            <th>
+							类别				
+							</th>
+							<th>
+								性质
+							</th>
+							<th>
+								期限
+                            </th>
+							
+							<th>
+								范围	
+							</th>
+							<th>
+								合同号
+							</th>
+							<th style="width:80px">
+								其它备注	
+							</th>
+							<th style="width:80px">
+								已授权情况
+                            </th>
+							#if($!{admin.role_name}=="版权超级管理员A" )
+										
+							<th >
+								操作
+                            </th>
+                					
+							#end
+							
+                        </tr>
+						#set($i=1)	
+						#foreach($item in $!{crInfos})
+							<tr >
+								
+								<td>
+									$!{i}
+                                </td>
+								<td>
+									$!{item.type}
+                                </td>
+								<td>
+									$!{item.nature}
+                                </td>
+								<td>
+									$!{item.deadline}
+                                </td>
+								<td>
+									$!{item.scope}
+                                </td>
+								<td>
+									$!{item.contractNo}
+                                </td>
+								<td style="width:160px">
+									$!{item.remarks}
+                                </td>
+								<td style="width:160px">
+									$!{item.situation}
+                                </td>
+								
+								#if($!{admin.role_name}=="版权超级管理员A")	
+									<td>
+										<a href="/manage/copyright/info/view?id=$!{item.id}" class="btn btn-default btn-xs">修改</a>
+										<a href="#" onclick="crInfo_delete('$!{item.id}','$!{crBook.id}')" class="btn btn-default btn-xs">删除</a>
+                                    </td>
+								#end
+                            </tr>
+								#set($i=$i+1)								
+							#end
+						
+                        </table>
+					#end	
+                    </div>
+					<div class="panel-body" id="payinfo_1" style="border-style: solid;border-width: thin;">
+					#if($!{admin.role_name}=="版权超级管理员A" || $!{admin.role_name}=="版权超级管理员B" )
+						<p class="text-left">
+							支付信息
+                        </p>
+						#if($!{admin.role_name}=="版权超级管理员A" )
+										
+							<p class="text-right">
+								<a href="/manage/copyright/pay/create?bookId=$!{crBook.id}" class="btn btn-info btn-xs">添加</a>
+							</p>
+                		#end
+						
+						<table class="table table-bordered">
+                        <tr >
+							 <th>
+								序号						
+							</th>
+                            <th>
+								更新日期							
+							</th>
+							<th>
+								更新数量
+							</th>												
+							<th>
+								责任编辑
+							</th>
+							<th>
+								验收人
+							</th>
+							<th >
+								单价
+                            </th>
+							<th >
+								总金额
+                            </th>							
+							<th>
+								更新备注
+                            </th>	
+							
+							#if($!{admin.role_name}=="版权超级管理员A" )										
+							<th >
+								操作
+                            </th>
+                					                																	
+                			#end
+							
+                        </tr>
+						#set($i=1)
+							#foreach($item in $!{crPays})
+								<tr style="text-align:center">
+									<td>
+									$!{i}
+                                </td>
+									<td>
+										$!{item.updateDate}
+                                    </td>
+									<td>
+										$!{item.updateNumber}
+                                    </td>
+									<td>
+										$!{item.editorName}
+                                    </td>
+									<td>
+										$!{item.accepter}
+                                    </td>
+									<td>
+										$!{item.price}
+                                    </td>
+									<td>
+										$!{item.total}
+                                    </td>
+									<td>
+										$!{item.remarks}
+                                    </td>
+									#if($!{admin.role_name}=="版权超级管理员A")	
+    									<td>
+											<a href="/manage/copyright/pay/view?id=$!{item.id}" class="btn btn-default btn-xs">修改</a>
+											<a href="#" onclick="crPay_delete('$!{item.id}','$!{crBook.id}')"  class="btn btn-default btn-xs">删除</a>
+                                        </td>
+									#end
+                                </tr>
+								#set($i=$i+1)
+								
+							#end
+                        </table>
+					#end	
+                    </div>
+					#if($!{admin.role_name}=="版权超级管理员A" || $!{admin.role_name}=="版权超级管理员B" )
+					<div class="panel-body" id="input_1" style="border-style: solid;border-width: thin;">
+						<div class="row">
+							<div class="col-sm-4">
+								<p class="text-left">
+									#if($!{crBookfile.type}=="psd")
+										<a type="button" class="btn btn-default  btn-xs"  href="#">下载全部psd文件</a>
+									#end
+                                </p>
+                            </div>
+							<div class="col-sm-4">
+								<p class="text-center">
+									#if($!{crBookfile.type}=="jpg")
+									
+										<a type="button" class="btn btn-default btn-xs"  href="/manage/copyright/bookfile/down?id=$!{crBookfile.id}">下载jpg样本文件</a>						
+									#end
+                                </p>
+                            </div>
+							<div class="col-sm-4">
+								<p class="text-right">
+									#if($!{admin.role_name}=="版权超级管理员A" )
+										<a type="button"  class="btn btn-sm" data-toggle="modal" data-target="#myModal">我要上传</a>
+									#end
+                                </p>
+                            </div>
+							
+							 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">添加样本文件</h4>
+                                      </div>
+                                      <div class="modal-body">
+            							<form role="form" class="form-horizontal" method="post" action="/manage/copyright/bookfile/save">
+											#if($!{crBookfile})
+                								<input type="hidden" id="authorId" name="id" value="$!{crBookfile.id}"/>
+                							#else
+                								<input type="hidden" id="authorId" name="id" value="0"/>
+                							#end
+            								<input type="hidden" name="bookId" value="$!{crBook.id}">
+            								<input type="hidden" name="updateUser" value="$!{admin.login_name}" />
+            								<div class="form-group">
+                                                <label class="col-sm-2 control-label">作品名称</label>
+                                                <div class="col-sm-10">
+                                                  <p class="form-control-static">$!{crBook.bookName}</p>
+                                                </div>
+                                              </div>
+            								
+											  	<div class="form-group" >
+                                                 <label for="forlinkEmail" class="col-sm-2 control-label">图片格式<span id="forlinkEmail" style="color:red"> </span></label>
+                        						 
+                        						  <label class="radio-inline">
+                                                    <input type="radio" name="type" id="status1" value="jpg" checked >
+														jpg
+                                                  </label >
+                                                  <label class="radio-inline">
+                                                    <input type="radio" name="type" id="status0" value="psd">
+														psd
+                                                  </label>                        
+                                  		 </div>
+                                            <div class="form-group">
+                                              <label for="forbriefIntro" class="col-sm-2 control-label">样本资源</label>
+            								  <div class="col-sm-10">
+												 
+												
+                                              	<button type="button" class="btn btn-mini" id="fileUrlBtn">选择文件
+                                                </button>
+                                                <br>
+                                                <input type="text" name="savePath" id="savePath" value="$!{crBookfile.savePath}">
+													<br>
+            									<span class="help-inline">按样本格式，选择文件夹</span>
+            								   </div>
+                                            </div>
+            								
+            								<div class="form-group" >
+                                                 <label for="forlinkEmail" class="col-sm-2 control-label">是否启用<span id="forlinkEmail" style="color:red"> </span></label>
+                        						 
+                        						  <label class="radio-inline">
+                                                    <input type="radio" name="status" id="status1" value="1" checked >
+														是
+                                                  </label >
+                                                  <label class="radio-inline">
+                                                    <input type="radio" name="status" id="status0" value="0">
+														否
+                                                  </label>                        
+                                  		 </div>
+            								
+            								
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                        <button type="submit"  class="btn btn-primary">提交</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+							
+                        </div>
+						<div class="row">
+							<table class="table table-bordered" style="word-break:break-all; word-wrap:break-word;">
+                        <tr >
+							<th >
+								序号
+                            </th>
+                            <th>
+								操作人			
+							</th>
+							<th>
+								操作行为
+							</th>
+							<th>
+								操作信息
+                            </th>
+								
+							<th>
+								时间
+							</th>
+							
+							
+							
+                        </tr>
+						#set($i=1)	
+						#foreach($item in $!{crLogs})
+							<tr >
+								
+								<td>
+									$!{i}
+                                </td>
+								<td>
+									$!{item.adminName}
+                                </td>
+								<td>
+									$!{item.behaviour}
+                                </td>
+								<td>
+									$!{item.logInfo}
+                                </td>
+								<td>
+									$!{item.createTime}
+                                </td>
+								
+                            </tr>
+								#set($i=$i+1)								
+							#end
+						
+                        </table>
+							
+                        </div>
+						#end
+                    </div>
+																							      
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+
+
+
+</body>
+</html>

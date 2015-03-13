@@ -1,0 +1,125 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("./layout/header.html")  
+	<script >
+    /*
+	$(function () {
+		function createComparisonFunction(propertyName){
+			return function(object1,object2){
+				var value1 = object1[propertyName];
+				var value2 = object2[propertyName];
+				if(value1<value2){
+					return -1;
+				}else if (value1>value2){
+					return 1;
+				}else{
+					0
+				}
+			};
+		
+		}
+			
+		var ddata = [{name:"Zachary",age:28},{name:"Nicholas",age:29}];
+		
+		ddata.sort(createComparisonFunction("name"));
+		
+		alert(ddata[0].name);
+		ddata.sort(createComparisonFunction("age"));
+		alert(ddata[0].name);
+		
+		var lambda = function(x) { return x + 2 };
+		var result = lambda(function(x) { return x * x} (3) );
+		alert(result);
+		
+	});
+	*/
+	</script>
+	
+</head>
+
+<body>
+#parse("./layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("./layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">基础管理 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+					
+                  <li><a href="/manage/base/platform/list">平台列表</a></li>
+				  <li><a href="/manage/base/vote/list">投票列表</a></li>
+                
+                  
+                </ul>
+              </div>
+				
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">漫画管理 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/author/list">漫画家列表</a></li>
+                  <li><a href="/manage/book/list">漫画列表</a></li>
+                  <li><a href="/manage/book/type/list">漫画分类</a></li>
+				 
+                </ul>
+              </div><!-- /btn-group -->
+              <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">活动管理 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/activity/list">活动列表</a></li>
+                 
+                  <li class="divider"></li>
+                  
+                </ul>
+              </div><!-- /btn-group -->
+              <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">用户管理 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/user/list">用户列表</a></li>
+                            
+                 <li class="divider"></li>         
+                </ul>
+              </div>
+            </div>
+			<hr>
+			<div class="highlight">
+				<form action="/manage/form/test" method="post" enctype="multipart/form-data">
+					<input type="text" name="param1" value="111111">
+						
+					<input type="file" name="file1"/>
+					<input type="file" name="file2"/>
+					<input type="submit" name="提交" value="submit"/>
+                </form>
+
+			</div>	
+				
+            
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,175 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+    <script >
+		function book_delete(id){
+			 var CarteValue = confirm("确认删除");
+            if(CarteValue){
+				 window.open ('/manage/client/recommend/delete?id='+ id  , '_self');
+				}
+			}
+    </script>
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">漫画推荐<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/client/recommend/create">添加推荐</a></li>
+                  <li><a href="/manage/client/recommend/list">推荐列表</a></li>
+                  
+                </ul>
+              </div>
+				
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">热门搜索<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/client/hotsearch/create">添加搜索词</a></li>
+                  <li><a href="/manage/client/hotsearch/list">搜索列表 </a></li>                 
+				  
+                </ul>
+              </div><!-- /btn-group -->
+             <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">滑块展示<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/client/slidershow/create">添加滑块</a></li>
+				  <li><a href="/manage/client/slidershow/list">滑块列表</a></li>
+                  <li class="divider"></li>
+                  
+                </ul>
+              </div><!-- /btn-group --> 
+			  
+            </div>
+			<hr>
+				<p class="text-center text-primary">
+					<span style="color:blue">
+						推荐列表
+                    </span>
+				</p>
+				
+			<div class="highlight">
+				<!--
+				<div class="row">	
+					
+					<div class="col-md-3">
+					<a type="button" id="status1" href="/manage/book/list?status=1" class="btn #if($!{status}==1) btn-info #else btn-default #end btn-xs">使用</a>
+					<a type="button" id="status0" href="/manage/book/list?status=0" class="btn #if($!{status}==0) btn-info #else btn-default #end btn-xs">未使用</a>                 
+				</div>
+					<div class="col-md-7">
+						<form class="form-inline" role="form" action="/manage/book/list/search" method="post">
+							
+                          <div class="form-group">
+                            <label class="sr-only control-label" for="forvalue">漫画搜索</label>
+                            <input type="text" name="value" class="form-control" id="forvalue" placeholder="漫画名称或者关键字">
+                          </div>
+                                      
+                          <button type="submit" class="btn btn-default">搜索</button>
+                        </form>
+					</div>
+					
+				</div>
+				-->
+				
+				
+			<div class="row">			  			  
+			  <table class="table table-bordered">																			
+				<tr>
+					<th>平台ID</th>
+					<th>漫画ID</th>
+					<th>漫画名称/标签</th>					
+					<th>序号</th>	
+					<th>状态</th>
+					<th>更多</th>
+				</tr>
+				
+			
+				#set($last =  $!{context.list.size()} - 1)
+											
+				#set($index = 0)
+										
+				#foreach($item in $!{context.list})	
+                <tr>
+					<td>$!{context.list.get($index).platformId}</td>
+					<td>$!{context.list.get($index).bookId}</td>
+					<td>
+						$!{context.list.get($index).dispName} &nbsp;&nbsp;/&nbsp;&nbsp;
+						$!{context.list.get($index).dispTags}
+					</td>
+					<td >
+						
+						
+						
+						
+    						#if($index == 0 && $last >0)							
+    							#set($up = $index + 1)	
+    							<a type="button" class="btn btn-info btn-sm" href="/manage/client/recommend/disp?down=$!{context.list.get($index).id}&up=$!{context.list.get($up).id}&pageIndex=$!{context.pageIndex}">↓</a>
+    							
+    						#elseif($index == $last && $last >0)
+    							
+    							#set($down = $index - 1)
+    							<a type="button" class="btn btn-info btn-sm" href="/manage/client/recommend/disp?down=$!{context.list.get($down).id}&up=$!{context.list.get($index).id}&pageIndex=$!{context.pageIndex}">↑</a>
+    							
+    						#elseif($index > 0 && $index < $last )
+    							
+    							#set($up = $index + 1)
+    							#set($down = $index - 1)
+    							<a type="button" class="btn btn-info btn-sm" href="/manage/client/recommend/disp?down=$!{context.list.get($down).id}&up=$!{context.list.get($index).id}&pageIndex=$!{context.pageIndex}">↑</a>
+    							<a type="button" class="btn btn-info btn-sm" href="/manage/client/recommend/disp?down=$!{context.list.get($index).id}&up=$!{context.list.get($up).id}&pageIndex=$!{context.pageIndex}">↓</a>														
+    						#end
+                    </td>
+					<td>
+						#if($!{context.list.get($index).status}==1)
+							使用
+						#else
+							未使用
+						#end
+					</td>
+					
+					<td><div class="btn-group btn-group-xs">
+					
+					<!--	<a type="button" class="btn btn-info btn-sm" href="/manage/client/recommend/view?id=$!{context.list.get($index).id}">查看</a>-->	
+						<a type="button" class="btn btn-info btn-sm" href="/manage/client/recommend/update?id=$!{context.list.get($index).id}">修改</a>	
+						<a type="button" class="btn btn-info btn-sm" href="#" onclick="book_delete($!{context.list.get($index).id})">删除</a>
+					
+					</div></td>
+				</tr>
+				#set($index = $index + 1)
+				#end
+				</table>
+				#parse("/layout/pagenav.vm")
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,186 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	#include("./layout/header.html") 
+	
+	<script charset="utf-8" src="/manage/static/js/jquery.json-2.4.js"></script>
+    <script charset="utf-8" src="/manage/static/js/manage-use.js"></script>
+	<script >	
+					 
+		var data= {'pageIndex':1} ;
+		
+		var url='/manage/book/pageNavJson';
+		
+		function repeatPage(content){
+			//alert(content);
+			if(content!=null &&content!=null){				
+				for(var i=0;i<content.length;i++){
+					//alert(content[i].id);
+				}				
+			}
+			
+		}
+		
+		function initListener(){		
+			var select = document.getElementById('officialFlag');				
+			var searchFlags =  document.getElementsByName("searchFlag");				
+			var Aicons = document.getElementsByName('pageIndex');
+			
+			for(var i=0;i<searchFlags.length;i++){				
+				searchFlags[i].onclick = function (){				
+					execAction(this,url,data);					
+				}						
+			}
+			for(var i=0;i<Aicons.length;i++){				
+				Aicons[i].onclick = function (){				
+					execAction(this,url,data);					
+				}						
+			}				
+			select.onchange=function (){				
+				execAction(this,url,data);					
+			}
+		}
+		
+		$(function () {
+				/*
+		        var  arr = new Array();
+				arr.push('one');
+				arr.push('two');
+				data['list']=arr;
+				alert($.toJSON(data));
+    			
+    				或者jquery对象，attr('name')
+    			*/
+				/*eventAction('/manage/book/listJson',data,target)*/
+				//addEventHandler(target,'change',eventAction);
+				$.ajax({  
+                url : url,  
+                type : 'POST',  
+                data : $.toJSON(data),  
+                dataType : 'json',  
+                contentType : 'application/json',  
+                success : function(data, status, xhr) {
+				
+        			if(data != null){						
+        			    pageNav(data);
+						initListener();
+					
+        			}else{
+        				
+        			}
+                },  
+                Error : function(xhr, error, exception) {  
+                 
+                    alert(exception.toString());  
+                }  
+            }); 							
+		});				
+								
+    </script>
+	
+	
+</head>
+
+<body>
+#parse("./layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("./layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">漫画家 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/author/create">添加漫画家</a></li>
+                  <li><a href="/manage/book/author/list">漫画家列表</a></li>   
+				  <li><a href="/manage/book/author/home">其他</a></li>
+                </ul>
+              </div>
+				
+			  <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">漫画分类 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/type/create">添加分类</a></li>
+                  <li><a href="/manage/book/type/list">分类列表</a></li>
+                  <li><a href="#">其他</a></li>                                   
+                </ul>
+              </div><!-- /btn-group -->
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">漫画资源<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/create">添加漫画</a></li>
+                  <li><a href="/manage/book/list">漫画列表</a></li>
+                  
+                </ul>
+              </div><!-- /btn-group -->
+              
+           
+			  
+			  
+            </div>
+			<hr>
+			<div class="highlight">
+				<!--
+				<div class="form-group">
+                        <label for="forHeight" class="col-sm-2 control-label">原版标志</label>
+                        <div class="col-sm-4" >
+                         <select class="" name="status" id="officialFlag">						 
+                          <option value="1" >原版</option>
+                          <option value="2" >官方译本</option>
+						  <option value="3">其他译本</option>					 
+                        </select>
+                        </div>
+                      </div>
+					<div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">搜索标志<span id="forlinkEmail" style="color:red"> </span></label>			 
+						  <label class="radio-inline">
+                            <input type="radio" name="searchFlag" id="searchFlag1" value="1" checked>
+                                                              允许
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="searchFlag" id="searchFlag0" value="0">
+                                                             不允许
+                          </label>                        
+                       </div>
+					   <a href="#" name="pageIndex"  id="fgserh" value="1">
+                       </a>
+					   <div class=" pull-right" id="pageNav">							
+                       </div>
+					    <span class="glyphicon glyphicon-star"></span> Star
+					   -->
+					   
+					
+					   
+					   		   
+					   
+					   
+			</div>	
+			
+			
+            
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+
+
+
+</body>
+</html>

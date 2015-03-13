@@ -1,0 +1,118 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+    <script >
+	function apply_delete(id){
+		var CarteValue = confirm("确认删除");
+        if(CarteValue){
+			 window.open ('/manage/activity/apply/delete?id='+ id  , '_self');
+			}
+		}		
+    </script>
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+				<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">活动管理<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                     <li><a href="/manage/activity/list">活动列表</a></li>
+                     <li><a href="/manage/activity/create">添加活动</a></li>
+					 <li><a href="#">待续...</a></li>
+                     </ul>
+                 </div>
+				 
+				 <div class="btn-group">
+                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">用户互动<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">查看列表</a></li>
+                     <li><a href="#">待续...</a></li>
+                     </ul>
+                 </div>
+			   
+			   
+            </div>
+			<hr>
+				<p class="text-center text-primary">
+    				<span style="color:blue">活动反馈表
+                    </span>
+    			</p>
+			<div class="highlight">
+				<p class="text-left text-primary">
+    					<a href="/manage/activity/list" >
+                                  活动    
+						</a>><a href="/manage/activity/view?id=$!{activity.id}" >
+							
+                               $!{activity.subject}
+							   
+					    </a>              
+    			  </p>
+				
+				<br>
+				<div class="btn-group">
+                  <a type="button" id="status0" href="/manage/activity/apply/list?acId=$!{activity.id}&status=0" class="btn btn-sm #if($!{status}==0) btn-success #else btn-default #end">未处理</a>
+                  <a type="button" id="status1" href="/manage/activity/apply/list?acId=$!{activity.id}&status=1" class="btn btn-sm #if($!{status}==1) btn-success #else btn-default #end">已处理</a>
+                </div>
+				
+			<div class="row">
+				
+			  <table class="table table-bordered">																			
+				
+				<tr>
+					<th>笔名</th>
+					<th>主要作品</th>
+					<th>qq</th>
+					<th>手机</th>	
+					<th>报名时间</th>
+					<th>其他</th>
+				</tr>	
+				
+				#foreach($item in $!{context.list})
+                <tr>
+					<td>$!{item.penName}</td>
+					<td>$!{item.masterPiece}</td>
+					<td>$!{item.qq}</td>
+					<td>$!{item.mobile}</td>
+					<td>$!{item.createTime}</td>
+					<td><div class="btn-group btn-group-xs">								
+					<a class="btn" href="/manage/activity/apply/view?id=$!{item.id}">查看</a>				
+					</div></td>
+					
+				</tr>
+				#end
+				</table>
+				#parse("/layout/pagenav.vm")
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

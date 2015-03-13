@@ -1,0 +1,156 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")  
+	
+	<script >
+	
+		function init_dialog(adminId){
+			alert(adminId);
+			$('#adminId').val(adminId);
+		}
+		
+	
+    </script>
+	
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+           
+			<hr>
+				<p class="text-center text-primary">
+					<span style="color:blue">
+						管理员列表
+                    </span>
+				</p>
+				
+			<div class="highlight">
+    			<div class="modal fade" id="roleModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal1" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">角色分配</h4>
+                      </div>
+                      <div class="modal-body form-horizontal">
+            			 <form role="form" class="form-horizontal" method="post" action="/manage/admin/user/role/create" >
+							<input type="hidden" name="token" value="$!{token}" />
+							<input type="hidden" id="adminId" name="adminId" value=""/>
+							            				                                       				
+            				<div class="form-group">
+							<label for="forHeight" class="col-sm-2 control-label">权限角色</label>
+							<div class="col-sm-5" >
+                             <select name="roleId" class="form-control">
+    							
+    						  #foreach($role in $!{roles})
+                                  <option value="$!{role.id}">${role.name}</option>                        
+    						  #end
+                            </select>
+                            </div>
+                          </div>
+						  <div class="form-group" >
+                             <label for="forlinkEmail" class="col-sm-2 control-label">是否启用<span id="forlinkEmail" style="color:red"> </span></label>
+    						 
+    						  <label class="radio-inline">
+                                <input type="radio" name="status" id="status1" value="1" checked >
+                                                                  是
+                              </label >
+                              <label class="radio-inline">
+                                <input type="radio" name="status" id="status0" value="0">
+                                                                否
+                              </label>                        
+                  		 </div>
+            					                                     		 
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="submit"  class="btn btn-primary" data-dismiss="modal1">确认</button>
+                      </div>
+					  </form>
+                    </div>
+                  </div>
+                </div>	
+				
+			<div class="row">	
+				<a class="btn btn-primary" href="/manage/admin/user/create">
+                             添加
+               </a>	
+			  <table class="table table-bordered" >
+				
+				<tr>
+					<th>id</th>
+					<th>登录名</th>
+					<th>密码</th>
+					<th>真实姓名</th>
+                    <th>权限</th>					
+					<th>功能</th>
+					
+				</tr>				
+				#foreach($item in $!{context.list})
+                <tr>
+					<td>$!{item.id}</td>
+					<td>$!{item.name}</td>
+					<td >
+						$!{item.pwd}
+                    </td>
+					<td>$!{item.realName}</td>
+					
+					<td>
+						#if($!{item.roles})
+							#foreach($role in $!{item.roles})
+								$!{role.name} &nbsp;
+							#end
+						#end
+					</td>
+					
+					<td>
+						
+    						<a type="button" class="btn btn-default btn-sm" href="/manage/admin/user/view?id=$!{item.id}"> <span class="glyphicon glyphicon-zoom-in"></span>设置</a>	
+    						<a type="button" class="btn btn-default btn-sm" href="#" onclick="user_delete($!{item.id})"><span class="glyphicon glyphicon-trash"></span>删除</a>    										
+    						<a type="button" data-toggle="modal" data-target="#roleModel" class="btn btn-default btn-sm" onclick="init_dialog('$!{item.id}')" href="#"><span class="glyphicon glyphicon-ok"></span>分配权限</a>
+						
+					
+					
+					
+					</td>
+				</tr>
+				#end
+				
+				</table>
+				 <div class=" pull-right" id="pageNav">
+					#parse("/layout/pagenav.vm")
+               </div>
+				
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

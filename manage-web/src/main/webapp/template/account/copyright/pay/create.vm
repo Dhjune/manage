@@ -1,0 +1,202 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("./layout/header.html")   
+	<link rel="stylesheet" type="text/css" href="/manage/static/kindeditor/themes/default/default.css"/>	
+    <script charset="utf-8" src="/manage/static/kindeditor/kindeditor.js"></script>
+	<script charset="utf-8" src="/manage/static/kindeditor/lang/zh_CN.js"></script>
+	
+	<script>
+			KindEditor.ready(function (K) {
+             var editor = K.editor({
+                allowFileManager: true,
+                fileManagerJson: '/manage/ke/filelist',
+                uploadJson: '/manage/ke/upload',
+                urlType: 'domain',
+                
+            });								
+			K('#coverBtn1').click(function() {
+				editor.loadPlugin('image', function() {
+					editor.plugin.imageDialog({						
+						imageUrl :  K('#coverImage1Url').attr('src'),
+						clickFn : function(url, title, width, height, border, align) {
+							K('#coverImage1Url').attr('src',url);	
+							K('#coverImageOne').val(url);							
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+			
+			K('#coverBtn2').click(function() {
+				editor.loadPlugin('image', function() {
+					editor.plugin.imageDialog({						
+						imageUrl :  K('#coverImage2Url').attr('src'),
+						clickFn : function(url, title, width, height, border, align) {
+							K('#coverImage2Url').attr('src', url);							
+							K('#coverImageTwo').val(url);							
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+			
+			
+		});	
+    </script>
+</head>
+
+<body>
+#parse("./layout/cr_top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	<div class="col-xs-3 col-sm-2 sidebar-offcanvas" id="sidebar" role="navigation">
+			
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+						版权作品
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in">
+                  <div class="panel-body btn-group-vertical">
+						
+						<a href="/manage/copyright/book/create" class="btn btn-default">作品添加</a>
+            			<a href="/manage/copyright/list" class="btn btn-default">作品列表</a>	                      
+                  </div>
+                </div>
+              </div>
+                        											
+		</div>
+		
+        <div class="col-xs-13 col-sm-10">
+		<br /><br />			
+			<p class="text-center text-primary">		  
+				<span style="color:blue">《$!{crBook.bookName}》支付信息添加
+                </span>
+			</p>
+			
+			
+			<div class="highlight">
+				
+				
+			
+			  <div class="row">
+				
+			  		<p class="text-left text-primary">	
+				
+				<a href="/manage/copyright/list" >作品列表</a>>		
+				<a href="/manage/copyright/view?bookId=$!{crBook.id}" >$!{crBook.bookName}</a>
+			</p>	  
+			 
+				
+			      <form role="form" class="form-horizontal" method="post" action="/manage/copyright/pay/create" >
+					<table class="table table-bordered">
+						<tr><td>
+					<input type="hidden" name="token" value="$!{token}"/>		
+					<input type="hidden" name="bookId" value="$!{crBook.id}" />
+					<input type="hidden" name="updateUser" value="$!{admin.login_name}" />
+					  <div class="form-group">
+                        <label for="forName" class="col-sm-2 control-label">更新日期</label>
+                        <div class="col-sm-4">
+                          <input type="text" name="updateDate" class="form-control" id="updateDate" placeholder="">
+                        </div>
+                       </div>
+					   
+					   <div class="form-group">
+                        <label for="forWidth" class="col-sm-2 control-label">更新数量</label>
+                        <div class="col-sm-4">
+                          <input type="text" name="updateNumber" class="form-control" id="updateNumber" placeholder="" >
+                        </div>
+                      </div>
+					   		   
+					  <div class="form-group">
+                        <label for="forWidth" class="col-sm-2 control-label">责任编辑</label>
+                        <div class="col-sm-4">
+                          <input type="text" name="editorName" class="form-control" id="editorName" placeholder="">
+                        </div>
+                      </div>
+					  
+					  <div class="form-group">
+                        <label for="forWidth" class="col-sm-2 control-label">验收人</label>
+                        <div class="col-sm-4">
+                          <input type="text" name="accepter" class="form-control" id="accepter" placeholder="">
+                        </div>
+                      </div>
+					  
+					  <div class="form-group">
+                        <label for="forWidth" class="col-sm-2 control-label">单价</label>
+                        <div class="col-sm-4">
+                          <input type="text" name="price" class="form-control" id="price" placeholder="">
+                        </div>
+                      </div>
+					  
+					  
+					   <div class="form-group">
+                        <label for="forWidth" class="col-sm-2 control-label">总金额</label>
+                        <div class="col-sm-4">
+                          <input type="text" name="total" class="form-control" id="total" placeholder="">
+                        </div>
+                      </div>
+					  
+					  
+					  <div class="form-group">
+                        <label for="forBriefIntro" class="col-sm-2 control-label">备注:</label>
+                        <div class="col-sm-6">
+                          <textarea name="remarks" id="remarks" class="form-control form_settings" rows="3"></textarea>
+                        </div>
+                      </div>
+					  
+					 					  					  
+					  
+					  	<div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">状态<span id="forlinkEmail" style="color:red"> </span></label>			 
+						  <label class="radio-inline">
+                            <input type="radio" name="status" id="status1" value="1" checked>
+                                                              使用
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="status" id="status2" value="0">
+                                                             不使用
+                          </label>                        
+                       </div>					   			   
+					  					  					  				   		   
+					   <div class="form-group">
+                           <div class="col-sm-offset-2 col-sm-10">
+                              <button type="submit" class="btn btn-default"> 提交</button>
+                           </div>
+                       </div>
+						  
+					    </td></tr>
+			           </table>	
+                  </form>
+							
+			   							
+			  </div>
+		 </div>
+								
+			
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

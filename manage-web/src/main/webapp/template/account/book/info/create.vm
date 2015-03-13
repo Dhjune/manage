@@ -1,0 +1,352 @@
+<html >
+<head>
+	
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+	<link rel="stylesheet" type="text/css" href="/manage/static/kindeditor/themes/default/default.css"/>	
+	<script charset="utf-8" src="/manage/static/kindeditor/kindeditor.js"></script>
+	<script charset="utf-8" src="/manage/static/kindeditor/lang/zh_CN.js"></script>
+	
+	<script>
+		
+			KindEditor.ready(function (K) {
+             var editor = K.editor({
+                allowFileManager: true,
+                fileManagerJson: '/manage/ke/filelist',
+                uploadJson: '/manage/ke/upload',
+                urlType: 'domain',
+                
+            });								
+			K('#bigImageBtn').click(function() {
+				editor.loadPlugin('image', function() {
+					editor.plugin.imageDialog({						
+						imageUrl :  K('#bigImageUrl').attr('src'),
+						clickFn : function(url, title, width, height, border, align) {
+							K('#bigImageUrl').attr('src',url);	
+							K('#bigImage').val(url);							
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+			
+			K('#smallImageBtn').click(function() {
+				editor.loadPlugin('image', function() {
+					editor.plugin.imageDialog({						
+						imageUrl :  K('#smallImageUrl').attr('src'),
+						clickFn : function(url, title, width, height, border, align) {
+							K('#smallImageUrl').attr('src', url);							
+							K('#smallImage').val(url);							
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+			
+			
+		});		
+		
+		var waring_name = 1;
+		var waring_realName = 1;
+		var waring_linkName = 1;
+		var waring_linkTele = 1;
+		var waring_linkEmail = 1;
+		
+		function confirm_name(_this){
+			if(_this.val()==""){
+				waring_name  = 1;
+				$("#forName").html("不能为空");			
+			}else{
+				waring_name = 0;
+				$("#forName").html("");
+			}
+		}
+		
+		function confirm_realName(_this){
+			if(_this.val()==""){
+				waring_realName  = 1;
+				$("#forRealName").html("不能为空");			
+			}else{
+				waring_realName = 0;
+				$("#forRealName").html("");
+			}
+		}
+		
+		function confirm_linkName(_this){
+			if(_this.val()==""){
+				waring_linkName  = 1;
+				$("#forlinkName").html("不能为空");			
+			}else{
+				waring_linkName = 0;
+				$("#forlinkName").html("");
+			}
+		}
+		
+		function confirm_linkTele(_this){
+		var reg=/^([0-9]|[\-])+$/g ;
+		if(_this.val()==""){
+			waring_linkTele  = 1;
+			$("#forlinkTele").html("不能为空");			
+		}else if(!reg.test(_this.val())){
+			waring_tel  = 1;
+			$("#forlinkTele").html("错误的号码格式");
+		}else{
+			waring_linkTele = 0;
+			$("#forlinkTele").html("");
+		}
+	}
+	
+	
+	
+	function confirm_linkEmail(_this){
+	 	var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;     
+		if(_this.val()==""){
+			waring_linkEmail  = 1;
+			$("#forlinkEmail").html("不能为空");			
+		}else if(!reg.test(_this.val())){
+			waring_linkEmail  = 1;
+			$("#forlinkEmail").html("email格式不对");	
+		}else{
+			waring_linkEmail = 0;
+			$("#forlinkEmail").html("");
+		}
+	}
+		
+		
+	function form_submit(){
+		waring =  waring_name + waring_realName + waring_linkName + waring_linkTele +waring_linkEmail  ;	
+		if(waring>0){
+			alert("请仔细填完表单");
+			return false;
+		}else{			
+			return true;
+		}
+	}
+		
+		
+	</script>			
+    <style type="text/css">
+        .form_settings
+        {
+                width: 80%;               
+        }
+        </style
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">漫画家 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/author/create">添加漫画家</a></li>
+                  <li><a href="/manage/book/author/list">漫画家列表</a></li>   
+                </ul>
+              </div>
+				
+			  <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">漫画分类 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/type/create">添加分类</a></li>
+                  <li><a href="/manage/book/type/list">分类列表</a></li>
+                </ul>
+              </div><!-- /btn-group -->
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">漫画资源<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/create">添加漫画</a></li>
+                  <li><a href="/manage/book/list">漫画列表</a></li>
+                  
+                </ul>
+              </div><!-- /btn-group -->
+              
+              
+			   
+            </div>
+			<hr>
+			<p class="text-center text-primary">
+				  
+					<span style="color:blue">漫画信息
+                    </span>
+			</p>
+			<div class="highlight">
+			<p class="text-left text-primary">
+				<a href="/manage/book/list" >
+                          漫画      
+	          </a>> <a href="/manage/book/view?id=$!{book.id}" >
+                  $!{book.bookTitle}       
+			  </a>
+                       
+			</p>
+			  <div class="row">
+			               
+			  <br>
+				
+			      <form role="form" class="form-horizontal" method="post" action="/manage/book/info/create" >
+					
+					<input type="hidden" name="bookId" value="$!{bookId}">
+					<input type="hidden" name="bookTitle" value="$!{book.bookTitle}">	
+					<input type="hidden" name="updateUser" value="$!{admin.login_name}" />
+					<table class="table table-bordered">
+						<tr><td>
+													  					   
+					   <div class="form-group">
+                        <label for="forName" class="col-sm-2 control-label">副标题</label>
+                        <div class="col-sm-4">
+                          <input type="text" name="secondTitle" class="form-control" id="secondTitle" placeholder="">
+                        </div>
+                       </div>
+					   
+					  <div class="form-group">
+                         <label for="forHeight" class="col-sm-2 control-label">平台</label>
+                        <div class="col-sm-4">
+                         <select name="platId">
+							
+						  #foreach($plat in $!{plats})
+                              <option value="$!{plat.id}">${plat.name}</option>                        
+						  #end
+                        </select>
+                        </div>
+                      </div>
+					   					  					  
+					  					  				                     				  
+					  <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">是否送月票：<span id="forlinkEmail" style="color:red"> </span></label>
+						 
+						  <label class="radio-inline">
+                            <input type="radio" name="hasTicket" id="hasTicket1" value="1" >
+                                                              是
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="hasTicket" id="hasTicket0" value="0">
+                                                              否
+                          </label>                        
+                       </div>
+					   
+					   <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">是否计费:<span id="forlinkEmail" style="color:red"> </span></label>
+						 
+						  <label class="radio-inline">
+                            <input type="radio" name="hasFee" id="hasFee1" value="1" >
+									是
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="hasFee" id="hasFee0" value="0">
+									否
+                          </label>                        
+                       </div>
+					   
+					   <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">是否热门<span id="forlinkEmail" style="color:red"> </span></label>
+						 
+						  <label class="radio-inline">
+                            <input type="radio" name="hotFlag" id="hotFlag1" value="1" >
+                                                              是
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="hotFlag" id="hotFlag0" value="0">
+                                                              否
+                          </label>                        
+                       </div>
+					   
+					   <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">是否推荐<span id="forlinkEmail" style="color:red"> </span></label>
+						 
+						  <label class="radio-inline">
+                            <input type="radio" name="recommendFlag" id="recommendFlag1" value="1" >
+                                                              是
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="recommendFlag" id="recommendFlag0" value="0">
+                                                              否
+                          </label>                        
+                       </div>
+					   
+					   <div class="form-group">
+                        <label for="forName" class="col-sm-2 control-label">推荐理由</label>
+                        <div class="col-sm-4">
+							<textarea name="recommendReason" id="recommendReason" class="form-control form_settings" rows="3"></textarea>                     
+                        </div>
+                       </div>
+					   
+                       	  					  									  
+					  <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">状态<span id="forlinkEmail" style="color:red"> </span></label>			 
+						  <label class="radio-inline">
+                            <input type="radio" name="status" id="hasFee1" value="1" checked>
+                                                              使用
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="status" id="hasFee2" value="0">
+                                                             不使用
+                          </label>                        
+                       </div>
+					   
+					   <div class="form-group">
+                          <label for="forbriefIntro" class="col-sm-2 control-label">封面大图</label>
+						  <div class="col-sm-10">
+                          	<button type="button" class="btn btn-mini" id="bigImageBtn">选择图片
+                            </button>
+                            <br>
+                            <img id="bigImageUrl" name="bigImageUrl" src="" style="width:550px;height: 640px;"/>
+                            <input type="hidden" name="bigImage" id="bigImage" value="">
+								<span class="help-inline">建议图片大小为:640X550</span>
+						   </div>
+                         </div>
+						<div class="form-group">
+                              <label for="forbriefIntro" class="col-sm-2 control-label">封面小图</label>
+    						  <div class="col-sm-10">
+                              	<button type="button" class="btn btn-mini" id="smallImageBtn">选择图片
+                                </button>
+                                <br>
+                                <img id="smallImageUrl" name="smallImageUrl" src="" style="width:196px;height: 260px;"/>
+                                <input type="hidden" name="smallImage" id="smallImage" value="">
+									<span class="help-inline">建议图片大小为:260X196</span>
+    						   </div>
+                          </div>
+					  					  					  				   		   
+					   <div class="form-group">
+                           <div class="col-sm-offset-2 col-sm-10">
+                              <button type="submit" class="btn btn-default"> 提交</button>
+                           </div>
+                       </div>
+						  
+					    </td></tr>
+			           </table>	
+                  </form>
+				
+				
+			   							
+			  </div>
+			  
+			</div>	
+			
+			
+			
+       </div>
+	   
+      </div>  
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

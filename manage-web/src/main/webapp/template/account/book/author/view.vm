@@ -1,0 +1,371 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+	<script type="text/javascript" src="/manage/static/js/jquery.json-2.4.js"></script>
+	<script type="text/javascript" src="/manage/static/js/manage-use.js"></script>
+    <script >
+			
+	
+		var data= {'pageIndex':1,"author":$!{author.id}} ;
+		var url='/manage/book/pageNavJson';		
+		function repeatPage(content){
+			
+			if(content!=null &&content!=null){	
+				var strs ="<tr><th>漫画ID</th><th>漫画名称</th><th>更新章节</th><th>连载or完结</th><th>其他</th></tr>";
+				for(var index=0;index<content.list.length;index++){
+				
+					var serial="";				
+					var group="<a type='button' class='btn btn-default' href='/manage/book/view?id="+content.list[index].id+"'><span class='glyphicon glyphicon-zoom-in'></span>查看</a>"	;		
+ 					if(content.list[index].serialize == 1){
+						serial = "连载";
+					}else{
+						serial = "完结";
+					}
+					
+					strs +='<tr><td>'+content.list[index].id+'</td><td>'+content.list[index].bookTitle+'</td><td>'+content.list[index].chapterNum+'</td><td>'+serial+'</td><td>'+group+'</td></tr>';
+					
+				}	
+				$('#tdata').html(strs);
+			}
+			
+			
+		}	
+		
+		function initListener(){		
+						
+			var Aicons = document.getElementsByName('pageIndex');
+			
+			var Radios = document.getElementsByTagName('input');
+			for(var i=0;i<Aicons.length;i++){				
+				Aicons[i].onclick = function (){				
+					execAction(this,url,data);
+					
+				}						
+			}	
+			
+			for(var i=0;i<Radios.length;i++){
+				Radios[i].onclick=function(){
+					execAction(this,url,data);
+				}			
+			}
+		}
+		
+		$(function () {
+    			/*
+    				或者jquery对象，attr('name')
+    			*/
+				/*eventAction('/manage/book/listJson',data,target)*/
+				//addEventHandler(target,'change',eventAction);
+				$.ajax({  
+                url : url,  
+                type : 'POST',  
+                data : $.toJSON(data),  
+                dataType : 'json',  
+                contentType : 'application/json',  
+                success : function(data, status, xhr) {
+				
+        			if(data != null){						
+        			    pageNav(data);
+						initListener();
+						repeatPage(data);
+        			}else{
+        				
+        			}
+                },  
+                Error : function(xhr, error, exception) {  
+                 
+                    alert(exception.toString());  
+                }  
+            }); 							
+		});				
+				
+		
+		
+		/*
+		function init_book(authorId,index){
+		
+			var data={'author':authorId,'start':index};			
+			var url="/manage/book/listJson";
+			var arr = new Array(); 
+			$.ajax({  
+            url : url,  
+            type : 'POST',  
+            data : $.toJSON(data),  
+            dataType : 'json',  
+            contentType : 'application/json',  
+            success : function(data, status, xhr) {
+			
+   				 if(data != null && data.list !=null && data.list.length >0){
+				 	
+					for(var i=0;i<data.list.length;i++){
+											
+					}
+				 	
+				 
+					for(var index = 0;index<data.length;index++){					
+						html_string=html_string+"<option value='"+data[index].id+"'>"+ data[index].bookTitle+"</option>";
+						book_tags[data[index].id]={'bookTitle':data[index].bookTitle,'bookTags':data[index].bookTags};
+					}
+					
+					$('#bookId').html(html_string);	
+					$('#dispName').val(data[0].bookTitle);
+					$('#dispTags').val(data[0].bookTags);
+				}else{
+					$('#bookId').html(html_string);
+					$('#dispName').val('');
+					$('#dispTags').val('');
+				}
+            },  
+            Error : function(xhr, error, exception) {  
+                // handle the error.    
+                alert(exception.toString());  
+            }  
+        }); 
+		
+		}
+		
+		*/
+    </script>
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+			<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">漫画家 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/author/create">添加漫画家</a></li>
+                  <li><a href="/manage/book/author/list">漫画家列表</a></li>   
+                </ul>
+              </div>
+				
+			  <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">漫画分类 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/type/create">添加分类</a></li>
+                  <li><a href="/manage/book/type/list">分类列表</a></li>
+                </ul>
+              </div><!-- /btn-group -->
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">漫画资源<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/create">添加漫画</a></li>
+                  <li><a href="/manage/book/list">漫画列表</a></li>
+                  
+                </ul>
+              </div><!-- /btn-group -->
+                            
+			   
+            </div>
+			<hr>
+			<p class="text-center text-primary">
+				  
+					<span style="color:blue">漫画家详情
+                    </span>
+			</p>
+			<div class="highlight">
+				
+			<p class="text-left text-primary">
+					<a href="/manage/book/author/list" >
+                                  漫画家       
+					</a>><a href="/manage/book/author/view?id=$!{author.id}" >
+                             $!{author.name}       
+					 </a>                          				                   
+				</p>
+				
+				
+			<div class="row">
+              <div class="col-md-3">
+				<div class="thumbnail">
+                       <div class="caption">
+				<img src="$!{author.headImage}" alt="" class="img-thumbnail" style="width:160px;height:200px">
+				<p class="text-left text-primary">
+                    <a href="#" class="btn btn-primary btn-xs" >漫画家等级&nbsp;&nbsp;$!{author.teamLevel}&nbsp;&nbsp;</a>
+					<a href="#" class="btn btn-default btn-xs" >
+						#if($!{author.getAuth()}==0)  未认证 #elseif($!{author.getAuth()}==1) 已认证
+								 #end
+					</a>
+				</p>							
+					</div>
+				</div>	
+					
+			  </div>
+             
+              <div class="col-md-8">
+				    
+				<p class="text-left text-primary">
+					姓名：&nbsp;&nbsp;<span style="color:red">$!{author.realName}
+                    </span>
+				</p>
+				<p class="text-left ">
+					国家/地区：&nbsp;&nbsp;<span style="color:red"> &nbsp;&nbsp;$!{author.country} &nbsp;&nbsp;| &nbsp;&nbsp;$!{author.area} 
+                    </span>
+				</p>
+				<p class="text-left ">
+					联系人：&nbsp;&nbsp;<span class="text-primary" >$!{author.linkName}&nbsp;
+                    </span>
+				</p>
+				
+				<p class="text-left ">
+					联系电话：&nbsp;&nbsp;<span class="text-primary" >&nbsp; $!{author.linkTele}
+                    </span>
+				</p>
+				
+				<p class="text-left ">
+					邮箱：&nbsp;&nbsp;<span class="text-primary" >$!{author.linkEmail}
+                    </span>
+				</p>
+				
+					<p class="text-left ">
+					所属公司：&nbsp;&nbsp;<span class="text-primary" >$!{author.company}
+                    </span>
+				</p>
+		
+				<p class="text-left ">
+					简介：&nbsp;&nbsp;<span >$!{author.briefIntro}
+                    </span>
+				</p>
+									<p class="text-left ">
+				<a href="/manage/book/author/update?id=$!{author.id}" class="btn btn-primary btn-sm" >
+					
+                                         修改
+										 
+                </a>	
+				&nbsp;&nbsp;&nbsp;&nbsp;<a href="/manage/book/create?authorId=$!{author.id}" class="btn btn-primary btn-sm" >
+					
+					添加漫画
+					
+                </a><!--
+				&nbsp;&nbsp;&nbsp;&nbsp;<a href="/manage/book/edcomment/list?bookId=$!{book.id}" class="btn btn-primary btn-sm" >
+					编辑评论                  
+                </a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/manage/book/types?id=$!{book.id}" class="btn btn-primary btn-sm" >
+					 分类管理                 
+                </a>-->
+				</p>
+				<!--
+				<div class="row">
+					<button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#tableview">
+                                        数据表 
+					</button>
+				
+						<div id="tableview" class="panel-collapse collapse in">
+							<div class="panel-body">
+								<table >
+									<tr >										
+										<th>
+											书籍ID
+										</th>
+										<th>
+											书籍名称
+										</th>
+										<th >
+											其他
+                                        </th>
+                                    </tr>
+									
+                                    
+                                </table>
+							
+							</div>
+						</div>
+							
+                </div>
+				-->
+				
+				
+			  </div>
+            </div>
+			
+			<div class="row">
+				
+				<p class="text-center ">
+    			&nbsp;&nbsp;&nbsp;&nbsp;
+				<button type="button"  class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#tableview">
+                                       作者漫画
+    			</button>	
+			</p>
+			
+				<div id="tableview" class="panel-collapse collapse in">
+					 <div class="thumbnail col-md-8">
+        				<dl class="dl-horizontal ">
+                            <dt>有效/无效</dt>
+                            <dd>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="radio-inline">
+                            <input type="radio" name="status" id="hasFee1" value="1" >
+                                                              有效
+                          </label >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <label class="radio-inline">
+                            <input type="radio" name="status" id="hasFee2" value="0">
+								无效
+                          </label>  </dd>
+                            <dt>连载/完结</dt>
+                            <dd>
+								 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="radio-inline">
+                            <input type="radio" name="serialize" id="hasFee1" value="1" >
+                                                              连载
+                          </label >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <label class="radio-inline">
+                            <input type="radio" name="serialize" id="hasFee2" value="2">
+                                                             完结
+                          </label> 
+							</dd>                     
+                            <dt>其他</dt>
+                            <dd></dd>
+                          </dl>
+        			 </div>
+					<div class="panel-body">
+						<table class="table table-striped table-bordered" id="tdata">
+							<tr >										
+								<th>
+									书籍ID
+								</th>
+								<th>
+									书籍名称
+								</th>
+								<th >
+									其他
+                                </th>
+                            </tr>
+							
+                            
+                        </table>
+						 <div class=" pull-right" id="pageNav">
+							
+                       </div>
+					</div>
+				</div>
+							
+                </div>				
+			
+	
+				
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+ 
+	 	
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+</div>
+</body>
+</html>

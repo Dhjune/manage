@@ -1,0 +1,93 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+	
+
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+			<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">用户管理 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/user/list">用户列表</a></li>
+               
+                  
+                </ul>
+              </div>
+								
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">用户评论<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                   <li><a href="/manage/user/comment/list">评论库</a></li>
+				  <li><a href="#">最新评论库</a></li>
+                  
+                </ul>
+              </div><!-- /btn-group -->
+                            			   
+            </div>
+			<hr>
+			<p class="text-center text-primary">
+					<span style="color:blue">阅读记录
+                    </span>
+			</p>
+			<div class="highlight">
+				
+			<p class="text-left text-primary">
+				用户：<span style="color:red"> $!{user.name}
+                    </span>
+				</p>	
+				
+			<div class="row">
+				<div class="col-md-9">
+				<table class="table table-bordered table-hover ">
+					<tr>
+					<th>用户名称</th>
+					<th>漫画名称</th>				
+					<th>阅读时间</th>	
+					<th>时长</th>
+					</tr>
+					#foreach($item in $!{context.list})
+						<tr >
+							<td >$!{user.name}</td>
+							<td >$!{item.getBook_title()}</td>
+							<td >$!{item.getStart_time()}---$!{item.getEnd_time()}</td>
+							<td >$!{item.getRead_second()}/s</td>
+                        </tr>
+						
+					#end	
+				</table>
+				#parse("/layout/pagenav.vm")	
+				</div>			
+            </div>
+			<br>
+											   			
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+ 
+    <footer>
+		 <hr>
+        <p>&copy; Company 2013</p>
+    </footer>
+</div>
+</body>
+</html>

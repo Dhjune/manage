@@ -1,0 +1,173 @@
+<html >
+<head>
+	
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+	<link rel="stylesheet" type="text/css" href="/manage/static/kindeditor/themes/default/default.css"/>	
+	<script charset="utf-8" src="/manage/static/kindeditor/kindeditor.js"></script>
+	<script charset="utf-8" src="/manage/static/kindeditor/lang/zh_CN.js"></script>
+	<script charset="utf-8" src="/manage/static/datepicker/WdatePicker.js"></script>
+	<script>
+			KindEditor.ready(function (K) {
+             var editor = K.editor({
+                allowFileManager: true,
+                fileManagerJson: '/manage/ke/filelist',
+                uploadJson: '/manage/ke/upload',
+                urlType: 'domain',
+                
+            });								
+			
+			
+			K('#ImageUrlBtn').click(function() {
+				editor.loadPlugin('image', function() {
+					editor.plugin.imageDialog({						
+						imageUrl :  K('#ImageUrlImg').attr('src'),
+						clickFn : function(url, title, width, height, border, align) {
+							K('#ImageUrlImg').attr('src', url);							
+							K('#imageUrl').val(url);							
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+			
+			
+		});		
+				
+		
+	</script>			
+    <style type="text/css">
+        .form_settings
+        {
+                width: 80%;               
+        }
+        </style
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">活动管理<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="/manage/activity/list">活动列表</a></li>
+                     <li><a href="/manage/activity/create">添加活动</a></li>
+					 <li><a href="#">待续...</a></li>
+                     </ul>
+                 </div>
+				 
+				 <div class="btn-group">
+                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">用户互动<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">查看列表</a></li>
+                     <li><a href="#">待续...</a></li>
+                     </ul>
+                 </div>
+			   
+			   
+            </div>
+			<hr>
+    			<p class="text-center text-primary">
+    				<span style="color:blue">活动图片
+                    </span>
+    			</p>
+			<div class="highlight">
+				 <p class="text-left text-primary">
+    					<a href="/manage/activity/list" >
+                                  活动    
+						</a>><a href="/manage/activity/view?id=$!{activity.id}" >
+                               $!{activity.subject}       
+					    </a>              
+    			  </p>
+			  <div class="row">	
+				
+			  <br>				
+			      <form role="form" class="form-horizontal" method="post" action="/manage/activity/image/update" >
+					<table class="table table-bordered">
+						<tr><td>
+					  <input type="hidden" name="token" value="$!{token}"/>			
+					  <input type="hidden" name="id" value="$!{pic.id}"/>
+					  <input type="hidden" name="updateUser" value="$!{admin.login_name}" />
+					  <div class="form-group">
+                        <label for="forName" class="col-sm-2 control-label">主题</label>
+						
+                        <div class="col-sm-4">
+                          <input type="text" name="subject" class="form-control" id="subject" value="$!{pic.subject}" placeholder="">
+                        </div>
+						
+                      </div>
+					   					  		  				  					  					  
+					  <div class="form-group">
+                        <label for="forBriefIntro" class="col-sm-2 control-label">简介</label>
+                        <div class="col-sm-6">
+                          <textarea name="intro" id="intro" class="form-control " rows="4">$!{pic.intro}</textarea>
+                        </div>
+                      </div>
+					  
+					  
+					  <div class="form-group">
+                          <label for="forbriefIntro" class="col-sm-2 control-label">活动图片</label>
+						  <div class="col-sm-10">
+                          	<button type="button" class="btn btn-mini" id="ImageUrlBtn">选择图片
+                            </button>
+                            <br>
+                            <img id="ImageUrlImg" name="ImageUrlImg" src="$!{pic.imageUrl}" style="width:200px;height: 200px;"/>
+                            <input type="hidden" name="imageUrl" id="imageUrl" value="$!{pic.imageUrl}">
+						   </div>
+                        </div>
+						
+					<div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">使用<span id="forlinkEmail" style="color:red"> </span></label>
+						 
+						  <label class="radio-inline">
+                            <input type="radio" name="status" id="status1" value="1" #if($!{pic.status}==1) checked #end>
+								是
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="status" id="status0" value="0" #if($!{pic.status}==0) checked #end>
+                                                              否
+                          </label>                        
+                      </div>
+					   					  					   					   					   					   					   										   						  
+					   <div class="form-group">
+                           <div class="col-sm-offset-2 col-sm-10">
+                              <button type="submit" class="btn btn-default"> 提交</button>
+                           </div>
+                       </div>
+						  
+					    </td></tr>
+			           </table>	
+                  </form>
+											   							
+			  </div>
+			  
+			</div>	
+			
+			
+			
+       </div>
+	   
+      </div>  
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

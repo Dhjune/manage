@@ -1,0 +1,94 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")  
+	
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+           
+			<hr>
+				<p class="text-center text-primary">
+					<span style="color:blue">
+						角色列表
+                    </span>
+				</p>
+				
+			<div class="highlight">
+																		
+			<div class="row">	
+				<a class="btn btn-primary" href="/manage/admin/role/create?pid=$!{admin.getAdmin_role_id()}">
+                             添加
+               </a>	
+			  <table class="table table-bordered" >
+				
+				<tr>
+					<th>PID</th>
+					<th>ID</th>
+					<th>角色名</th>
+                    <th>状态</th>					
+					<th>功能</th>
+					
+				</tr>				
+				#foreach($item in $!{context.list})
+                <tr>
+					<td>$!{item.pid}</td>
+					<td>$!{item.id}</td>
+					<td>$!{item.name}</td>
+					<td>
+						#if($!{item.status}==1)
+							有效
+							#else
+								无效
+								#end
+						
+					</td>
+					
+					<td>
+						
+    					<a type="button" class="btn btn-default btn-sm" href="/manage/admin/role/view?id=$!{item.id}"> <span class="glyphicon glyphicon-zoom-in"></span>设置</a>	
+						<a type="button" class="btn btn-default btn-sm" href="/manage/admin/role/create?pid=$!{item.id}"> <span class="glyphicon glyphicon-zoom-in"></span>添加子角色</a>	
+    					<a type="button" class="btn btn-default btn-sm" href="#" onclick="role_delete($!{item.id})"><span class="glyphicon glyphicon-trash"></span>删除</a>
+						
+					</td>
+				</tr>
+				#end
+				
+				</table>
+				 <div class=" pull-right" id="pageNav">
+					#parse("/layout/pagenav.vm")
+               </div>
+				
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

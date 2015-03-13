@@ -1,0 +1,232 @@
+<html >
+<head>
+	
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html") 
+	<script type="text/javascript" src="/manage/static/js/jquery.json-2.4.js"></script>
+	<script>
+	var book_title='';
+	var book_tags = {};
+	
+	function init_div(value){
+		var url = "/manage/book/listJson";
+		var data={'typeId':value};
+		var html_string = '';			
+		$.ajax({  
+            url : url,  
+            type : 'POST',  
+            data : $.toJSON(data),  
+            dataType : 'json',  
+            contentType : 'application/json',  
+            success : function(data, status, xhr) {
+			
+   				 if(data != null&&data.length >0){
+				 
+					for(var index = 0;index<data.length;index++){	
+					
+						html_string=html_string+"<option value='"+data[index].id+"'>"+ data[index].bookTitle+"</option>";
+						book_tags[data[index].id]={'bookTitle':data[index].bookTitle,'bookTags':data[index].bookTags};
+					}
+					
+					$('#bookId').html(html_string);	
+					$('#dispName').val(data[0].bookTitle);
+					$('#dispTags').val(data[0].bookTags);
+				}else{
+					$('#bookId').html(html_string);
+					$('#dispName').val('');
+					$('#dispTags').val('');
+				}
+            },  
+            Error : function(xhr, error, exception) {  
+                // handle the error.    
+                alert(exception.toString());  
+            }  
+        }); 
+		}
+			
+		function init_book(value){
+		
+			//alert(book_tags[value].bookTitle);
+			$('#dispName').val(book_tags[value].bookTitle);
+			$('#dispTags').val(book_tags[value].bookTags);
+		}	
+			
+			/*
+			$.post(url,$.toJSON(data),function (data){
+                    if(data != null){					
+										
+					for(var index = 0;index<data.length;index++){	
+					
+						html_string=html_string+"<option value='"+data[index].id+"'>"+ data[index].bookTitle+"</option>";			
+					}					
+						$('#bookType').html(strs);						
+					}
+            },"json");
+			*/
+						
+				
+	
+	
+	</script>			
+    <style type="text/css">
+        .form_settings
+        {
+                width: 80%;               
+        }
+        </style
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">漫画推荐<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/client/recommend/create">添加推荐</a></li>
+                  <li><a href="/manage/client/recommend/list">推荐列表</a></li>
+                  
+                </ul>
+              </div>
+				
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">热门搜索<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/client/hotsearch/create">添加搜索词</a></li>
+                  <li><a href="/manage/client/hotsearch/list">搜索列表 </a></li>                 
+				  
+                </ul>
+              </div><!-- /btn-group -->
+             <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">滑块展示<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/client/slidershow/create">添加滑块</a></li>
+				  <li><a href="/manage/client/slidershow/list">滑块列表</a></li>
+                  <li class="divider"></li>
+                  
+                </ul>
+              </div>
+			   
+            </div>
+			<hr>
+			<p class="text-center text-primary">
+				<span style="color:blue">推荐漫画
+                </span>
+			</p>
+			<div class="highlight">
+				<p class="text-left text-primary">
+				<a href="/manage/client/recommend/list" >
+                                  推荐列表 
+				</a>                        				                   
+				</p>		
+			  <div class="row">
+			               		  
+			  <br>
+				
+			      <form role="form" class="form-horizontal" method="post" action="/manage/client/hotsearch/update" >
+					<table class="table table-bordered">
+						<tr><td>	
+					   <input type="hidden" name="token" value="$!{token}"/>
+					    <input type="hidden" name="id" value="$!{search.id}"/>
+						<input type="hidden" name="dispOrder" value="$!{search.dispOrder}"/>
+					   <div class="form-group">
+                         <label for="forHeight" class="col-sm-2 control-label">平台选择</label>
+                        <div class="col-sm-5">
+                         <select class="col-sm-7" name="platformId" id="platform" >
+							
+						    #foreach($platform in $!{platforms})
+                              <option value="$!{platform.id}" #if($!{search.platformId}==$!{platform.id}) selected #end> $!{platform.name}</option>                        
+							#end
+													
+                        </select>
+                        </div>
+                      </div>
+					  
+					   
+					   <div class="form-group">
+                        <label for="forpartName" class="col-sm-2 control-label">搜索分类</label>
+                        <div class="col-sm-5">
+							 <select class="col-sm-7" name="kind" id="kind" onchange="init_div(this.value)">													
+									<option value="1" #if($!{search.kind} == 1) selected #end>关键词</option>
+									<option value="2" #if($!{search.kind} == 2) selected #end>漫画分类</option>
+									<option value="3" #if($!{search.kind} == 3) selected #end>漫画名称</option>
+									<option value="4" #if($!{search.kind} == 4) selected #end>漫画作者</option>							
+							 </select>
+							 
+                        </div>
+                       </div>
+					   
+					   <div class="form-group">
+                        <label for="forpartName" class="col-sm-2 control-label">搜索内容</label>
+                        <div class="col-sm-4">
+							
+                          <input type="text" name="content" class="form-control" id="content" placeholder="可依据分类填写" value="$!{search.content}">
+							
+                        </div>
+                       </div>
+					   
+					   <div class="form-group">
+                        <label for="forpartName" class="col-sm-2 control-label">漫画ID</label>
+                        <div class="col-sm-5" id="div_content">
+							
+							 <input type="text" name="refId" class="form-control" id="refId" placeholder="漫画ID号" value="$!{search.refId}">
+								
+                        </div>
+                       </div>
+					   					   					   					   					   
+					   <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">状态<span id="forlinkEmail" style="color:red"> </span></label>			 
+						  <label class="radio-inline">
+                            <input type="radio" name="status" id="status1" value="1" #if($!{search.status}==1) checked #end>
+                                                              使用
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="status" id="status2" value="0" #if($!{search.status}==0) checked #end>
+                                                             不使用
+                          </label>                        
+                       </div>						   					  					   						  			 
+					   
+					   <div class="form-group">
+                           <div class="col-sm-offset-2 col-sm-10">
+                              <button type="submit" class="btn btn-default"> 提交</button>
+                           </div>
+                       </div>
+						  
+					    </td></tr>
+			           </table>	
+                  </form>
+				
+				
+			   							
+			  </div>
+			  
+			</div>	
+			
+			
+			
+       </div>
+	   
+      </div>  
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

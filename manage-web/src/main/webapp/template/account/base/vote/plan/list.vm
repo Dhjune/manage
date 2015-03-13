@@ -1,0 +1,146 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+    <script >
+		$(document).ready(function(){
+			$("#status$!{activity_status}").attr('class',"btn btn-info");
+		
+		});
+		function plan_delete(id){
+			 var CarteValue = confirm("确认删除");
+            if(CarteValue){
+				 window.open ('/manage/base/vote/plan/delete?id='+ id  , '_self');
+				}
+			}
+		
+    </script>
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">APPLICATION<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/app/create">app添加</a></li>
+                  <li><a href="/manage/base/app/list">app列表</a></li>              
+                </ul>
+              </div>
+			
+				<div class="btn-group">
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">平台管理 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/platform/create">添加平台</a></li>
+                  <li><a href="/manage/base/platform/list">平台列表</a></li>              
+                </ul>
+              </div>
+				
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">翻译团队 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/transteam/create">添加团队</a></li>
+                  <li><a href="/manage/base/transteam/list">团队列表</a></li>               
+                </ul>
+              </div><!-- /btn-group -->
+              			  
+			 <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">投票列表 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">			
+                  <li><a href="/manage/base/vote/create">添加投票</a></li>
+                  <li><a href="/manage/base/vote/list">投票列表</a></li>    
+				  <li><a href="#">其他</a></li> 
+				  
+                </ul>
+              </div>
+			  <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">用户投票计划 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                   <li><a href="/manage/base/vote/plan/user/list">计划列表</a></li>
+                  <li><a href="/manage/base/vote/plan/user/create">添加计划</a></li>
+                  
+                </ul>
+              </div>
+            </div>
+			
+			
+			<hr>
+				<p class="text-center text-primary">
+    				<span style="color:blue">投票计划
+                    </span>
+    			</p>
+			<div class="highlight">
+				
+				
+			<div class="row">			  
+              			  
+			  
+			  <table class="table table-bordered">																			
+				<tr>
+					<th>计划类型</th>
+					
+					<th>引用Id，子Id</th>
+					
+					<th>时间区间</th>
+					
+					<th>计划状态</th>
+					
+					<th>其他</th>
+				</tr>				
+				#foreach($item in $!{context.list})
+                <tr>
+					<td>$!{item.refType}</td>
+					<td>$!{item.refObjId}&nbsp;&nbsp;::$!{item.refSubId}</td>
+                    <td>$!{item.openTime}至$!{item.closeTime}</td>
+					<td>#if($!{item.status}==0)
+							无效
+						#elseif($!{item.status}==1)
+							有效
+						#else
+							待生效
+						#end</td>
+					
+					<td><div class="btn-group btn-group-xs">
+							
+						<a class="btn btn-info btn-xs" type="button" href="/manage/base/vote/plan/view?id=$!{item.id}">查看</a>	
+						<a class="btn btn-info btn-xs" type="button" href="/manage/base/vote/plan/update?id=$!{item.id}">修改</a>						
+						<a class="btn btn-info btn-xs" type="button" onclick="plan_delete('$!{item.id}')">删除</a>
+						
+					</div></td>
+				</tr>
+				#end
+				</table>
+				#parse("/layout/pagenav.vm")
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,224 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+		<link rel="stylesheet" type="text/css" href="/manage/static/kindeditor/themes/default/default.css"/>	
+	<script charset="utf-8" src="/manage/static/kindeditor/kindeditor.js"></script>
+	<script charset="utf-8" src="/manage/static/kindeditor/lang/zh_CN.js"></script>
+    <script >
+					
+			KindEditor.ready(function (K) {
+             var editor = K.editor({
+                allowFileManager: false,
+                fileManagerJson: '/manage/ke/filelist',
+                uploadJson: '/manage/ke/upload',
+                urlType: 'domain',
+                
+            });								
+			K('#ImageUrlBtn').click(function() {
+				editor.loadPlugin('image', function() {
+					editor.plugin.imageDialog({						
+						imageUrl :  K('#ImageUrlImg').attr('src'),
+						clickFn : function(url, title, width, height, border, align) {
+				          //  alert(url);
+							K('#ImageUrlImg').attr('src',url );								 
+							K('#picUrl').val(url);							 
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+		});	
+		
+		function changeStatus(i,url,type){                	
+                				
+    			$.post(url,function (data){
+                    if(data != null){					
+										
+					}
+                },"json");
+				$(ndivstr).show();			
+				$("#eventNodeType").val(type);						            
+        }
+		
+		function pic_delete(id){
+			 var CarteValue = confirm("确认删除");
+            if(CarteValue){
+				 window.open ('/manage/book/pic/delete?id='+ id +'&bookId=$!{book.id}' , '_self');
+				}
+			}
+    </script>
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+			<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">漫画家 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/author/create">添加漫画家</a></li>
+                  <li><a href="/manage/book/author/list">漫画家列表</a></li>   
+                </ul>
+              </div>
+				
+			  <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">漫画分类 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/type/create">添加分类</a></li>
+                  <li><a href="/manage/book/type/list">分类列表</a></li>
+                </ul>
+              </div><!-- /btn-group -->
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">漫画资源<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/create">添加漫画</a></li>
+                  <li><a href="/manage/book/list">漫画列表</a></li>
+                  
+                </ul>
+              </div><!-- /btn-group -->
+              
+              
+			   
+            </div>
+			<hr>
+			<p class="text-center text-primary">
+				  
+					<span style="color:blue">漫画图片
+                    </span>
+			</p>
+			<div class="highlight">
+				
+    			<p class="text-left text-primary">
+    				<a href="/manage/book/list" >
+                                  漫画       
+					</a>><a href="/manage/book/view?id=$!{book.id}" >
+                          $!{book.bookTitle}       
+			          </a>
+                       
+    				</p>	
+    				<a type="button"  class="btn btn-sm" data-toggle="modal" data-target="#myModal">添加图片</a>	
+    			<table class="table table-bordered">
+						<tr><td>			
+						  
+              	#set ($i=0)
+				#foreach($item in $!{pics})	
+					
+					#if($i %4 ==0)
+						<div class="row">
+					#end						
+					<div class="col-sm-6 col-md-4">
+                        <div class="thumbnail">
+                          <img src="$!{item.picUrl}" alt="" style="width:160px;height: 160px;" class="img-thumbnail" >
+                          <div class="caption">
+                            <h5>$!{item.subject}</h5>
+                            <p>$!{item.intro}</p>
+                            <p>
+								<a href="./update?id=$!{item.id}&bookId=$!{book.id}" class="btn btn-primary btn-sm" role="button">修改</a> 
+								<!--
+								<a href="#" class="btn btn-default btn-sm" role="button" onclick="pic_delete($!{item.id})">删除</a>
+								-->
+								#if($!{item.status}==1)
+									<a id="use$!{item.id}" onclick="" href="./upstatus?id=$!{item.id}&status=0&bookId=$!{book.id}" class="btn btn-primary btn-sm" role="button">不使用  </a>
+								#else
+									<a id="unuse$!{item.id}" href="./upstatus?id=$!{item.id}&status=1&bookId=$!{book.id}" class="btn btn-primary btn-sm" role="button">使用  </a>
+									#end
+							</p>
+                          </div>
+                        </div>
+                      </div>												
+					#if($i %3 ==2)
+						</div>
+					#end
+					#if($i==$!{context.list.size()}&& $i%3 !=2)
+						</div>
+					#end	
+					#set($i=$i+1)	
+				 #end		  			  
+                </td></tr></table>			
+						
+				  											
+				#parse("/layout/pagenav.vm")						                        
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">添加图片</h4>
+                          </div>
+                          <div class="modal-body">
+							<form role="form" class="form-horizontal" method="post" action="/manage/book/pic/create">
+								<input type="hidden" name="bookId" value="$!{book.id}">
+								<input type="hidden" name="updateUser" value="$!{admin.login_name}" />
+								<div class="form-group">
+                                    <label class="col-sm-2 control-label">漫画名称</label>
+                                    <div class="col-sm-10">
+                                      <p class="form-control-static">$!{book.bookTitle}</p>
+                                    </div>
+                                  </div>
+								
+                                <div class="form-group">
+                                  <label for="forbriefIntro" class="col-sm-2 control-label">图片资源</label>
+								  <div class="col-sm-10">
+                                  	<button type="button" class="btn btn-mini" id="ImageUrlBtn">选择图片
+                                    </button>
+                                    <br>
+                                    <img id="ImageUrlImg" name="ImageUrlImg" src="" style="width:96px;height: 124px;"/>
+                                    <input type="hidden" name="picUrl" id="picUrl" value="">
+									<span class="help-inline">建议图片大小为:124x96</span>
+								   </div>
+                                </div>
+								
+								<div class="form-group" >
+                                     <label for="forlinkEmail" class="col-sm-2 control-label">是否启用<span id="forlinkEmail" style="color:red"> </span></label>
+            						 
+            						  <label class="radio-inline">
+                                        <input type="radio" name="status" id="status1" value="1" checked >
+                                                                          是
+                                      </label >
+                                      <label class="radio-inline">
+                                        <input type="radio" name="status" id="status0" value="0">
+                                                                        否
+                                      </label>                        
+                      		 </div>
+								
+								
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="submit"  class="btn btn-primary">提交</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+			     <br>
+											
+            </div>
+				
+	</div>
+
+</div>	
+				               
+	 	
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+</div>
+</body>
+</html>

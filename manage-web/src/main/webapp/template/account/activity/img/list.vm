@@ -1,0 +1,129 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+    <script >
+		function acimg_delete(id){
+			var CarteValue = confirm("确认删除");
+            if(CarteValue){
+				 window.open ('/manage/activity/image/delete?id='+ id  , '_self');
+				}
+			}
+		
+		
+    </script>
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+				<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">活动管理<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="/manage/activity/list">活动列表</a></li>
+                     <li><a href="/manage/activity/create">添加活动</a></li>
+					 <li><a href="#">待续...</a></li>
+                     </ul>
+                 </div>
+				 
+				  <div class="btn-group">
+                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">用户互动<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">查看列表</a></li>
+                     <li><a href="#">待续...</a></li>
+                     </ul>
+                 </div>
+			   
+			   
+            </div>
+			<hr>
+				<p class="text-center text-primary">
+    				<span style="color:blue">活动图册
+                    </span>
+    			</p>
+			<div class="highlight">
+				<p class="text-left text-primary">
+    					<a href="/manage/activity/list" >
+                                  活动    
+						</a>><a href="/manage/activity/view?id=$!{activity.id}" >
+                               $!{activity.subject}       
+					    </a>              
+    			  </p>
+				
+				<p class="text-left text-primary"><a class="btn" class="btn btn-info" href="create?acId=$!{activity.id}">
+                              添加
+               </a>
+    				<span style="color:red">
+                    </span>
+    			</p>
+				<table class="table table-bordered">
+						<tr><td>			
+						  
+              	#set ($i=0)
+				#foreach($item in $!{context.list})	
+					
+					#if($i %4 ==0)
+						<div class="row">
+					#end		
+					
+					
+					<div class="col-sm-6 col-md-4">
+                        <div class="thumbnail">
+                          <img src="$!{item.imageUrl}" alt="" style="width:200px;height: 200px;" class="img-thumbnail" >
+                          <div class="caption">
+                            <h5>$!{item.subject}</h5>
+                            <p>$!{item.intro}</p>
+                            <p><a href="/manage/activity/image/update?id=$!{item.id}" class="btn btn-primary btn-sm" role="button">详情</a> &nbsp;&nbsp;
+								#if($!{item.status}==1)
+									<a href="#" class="btn btn-danger btn-sm" onclick="acimg_delete($!{item.id})" role="button">删除</a>
+								#else
+									<a id="unuse$!{item.id}" href="/manage/activity/image/upused?id=$!{item.id}&status=1" class="btn btn-primary btn-sm" role="button">使用  </a>
+									
+									#end
+							</p>	
+                          </div>
+                        </div>
+                      </div>												
+					#if($i %3 ==2)
+						</div>
+					#end
+					#if($i==$!{context.list.size()}&& $i%3 !=2)
+						</div>
+					#end	
+					#set($i=$i+1)	
+				 #end		  			  
+                </td></tr></table>
+				#parse("/layout/pagenav.vm")
+				
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

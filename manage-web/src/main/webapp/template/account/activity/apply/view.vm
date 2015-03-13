@@ -1,0 +1,244 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+	
+    <script >
+	function submit_form(){
+		$.ajax({
+                cache: true,
+                type: "POST",
+                url: "/manage/activity/apply/examine",
+                data:$('#examine-form').serialize(),// 你的formid
+                async: false,
+                error: function(request) {
+                    alert("Connection error");
+                },
+                success: function(data) {
+					$("#alert_view").html("<a class='close' data-dismiss='alert' href='#' aria-hidden='true'>&times;</a>");
+                    var i = 4;
+            		setInterval(function(){ 
+						if(i==0){
+						$("#alert_view").html("");
+							return;							
+						}
+					},1000);
+                }
+            });			
+		}			
+    </script>
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+	
+    <div class="row row-offcanvas row-offcanvas-right">   	
+    	#parse("/layout/leftsider.html")	
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+			<div class="btn-group">
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">活动管理<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="/manage/activity/list">活动列表</a></li>
+                     <li><a href="/manage/activity/create">添加活动</a></li>
+					 <li><a href="#">待续...</a></li>
+                     </ul>
+                 </div>
+				 
+				 <div class="btn-group">
+                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">用户互动<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">查看列表</a></li>
+                     <li><a href="#">待续...</a></li>
+                     </ul>
+                 </div>
+			   		  
+            </div>
+			
+			<hr>
+				
+			<p class="text-center text-primary">			  
+				<span style="color:blue">活动反馈
+             </span>
+			</p>
+			<div class="highlight">
+				<p class="text-left text-primary">
+    					<a href="/manage/activity/list" >
+                                  活动    
+						</a>><a href="/manage/activity/view?id=$!{apply.activity.id}" >
+                               $!{apply.activity.subject}     
+					    </a>              
+    			  </p>
+				
+			<div class="row">
+              <div class="col-md-5">
+					<table class="table">
+					<tr>
+					<td>
+    					<p class="text-left">
+						笔名：&nbsp;&nbsp;<span class="text-primary" ><small>$!{apply.penName}</small>
+                        </p>
+					</td>
+					</tr>
+					<tr>
+					<td>
+    					<p class="text-left">
+    					 真实姓名: &nbsp;&nbsp;<span class="text-primary" ><small>$!{apply.realName}</small>
+                        </p>
+					</td>						
+					</tr>
+					<tr>
+					<td>
+    					<p class="text-left">
+    					 qq: &nbsp;&nbsp;<span class="text-primary" >$!{apply.qq}<small>
+						
+                        </p>
+					</td>						
+					</tr>
+					<tr>
+					<td>
+    					<p class="text-left">
+    					 Email: &nbsp;&nbsp;<span class="text-primary" >$!{apply.email}<small>					
+                        </p>
+						
+					</td>						
+					</tr>
+					<tr>
+					<td>
+    					<p class="text-left">
+    					 联系地址: &nbsp;&nbsp;<span class="text-primary" >$!{apply.linkAddr}<small>					
+                        </p>
+						
+					</td>						
+					</tr>
+					<tr>
+					<td>
+    					<p class="text-left">
+    					 出生日期: &nbsp;&nbsp;<span class="text-primary" >$!{apply.birthdate}<small>					
+                        </p>
+						
+					</td>						
+					</tr>
+					
+					<tr>
+					<td>
+    					<p class="text-left">
+    					 报名时间: &nbsp;&nbsp;<span class="text-primary" >$!{apply.createTime}<small>					
+                        </p>
+						
+					</td>						
+					</tr>
+                   </table>
+			  </div>
+             
+              <div class="col-md-7">
+				    
+				
+				
+				<p class="text-left ">
+                    <span class="text-primary" >主要作品：</span>&nbsp;&nbsp;<span >$!{apply.masterPiece}
+                    </span>
+				</p>
+				<p class="text-left ">
+					<span class="text-primary" >创作时间：</span>&nbsp;&nbsp;<span >$!{apply.pieceCreateTime}
+                    </span>
+				</p>
+				
+				<p class="text-left ">
+					<span class="text-primary" >作品序列：</span>&nbsp;&nbsp;<span >$!{apply.pieceList}
+                    </span>
+				</p>
+				
+				<p class="text-left ">
+					<span class="text-primary" >标注：</span>&nbsp;&nbsp;<span >$!{apply.note}
+                    </span>
+				</p>
+				
+				<p class="text-left ">
+					<span class="text-primary" >作品内容描述：</span>&nbsp;&nbsp;<span >$!{apply.pieceContentIntro}
+                    </span>
+				</p>
+				
+				<p class="text-left ">
+					<span class="text-primary" >创作灵感：</span>&nbsp;&nbsp;<span >$!{apply.pieceIdeaIntro}
+                    </span>
+				</p>
+				
+				
+				
+			  </div>
+			  
+			  
+			  
+            </div>
+			<hr>
+				<div id="alert_view">
+					
+                </div>
+			   <div class="row">
+					<button type="button" class="btn btn-sm btn-info" data-toggle="collapse" data-target="#demo">						
+						处理记录
+					</button>
+
+					<div id="demo" class="collapse in">
+						 <form role="form" id="examine-form" class="form-horizontal" method="post" action="/manage/activity/apply/examine" >
+					<table class="table table-bordered">
+						<tr><td>
+						<input name="acId" type="hidden"  value="$!{apply.activity.id}"/>	
+						<input name="id" type="hidden"  value="$!{apply.id}"/>												  				   					 				   					  								 
+					  			  
+					  <div class="form-group">
+                        <label for="forBriefIntro" class="col-sm-2 control-label">结果记录</label>
+                        <div class="col-sm-6">
+                          <textarea name="result" id="result" class="form-control " rows="4">$!{apply.result}</textarea>
+                        </div>
+                      </div>
+					  
+					 	<div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">状态<span id="forlinkEmail" style="color:red"> </span></label>
+						  <div class="col-sm-5">
+						  <label class="radio-inline">		
+                            <input type="radio" name="status" id="status1" value="1" #if($!{apply.status}==1) checked #end>
+                                                            已处理
+                          </label> 
+						   <label class="radio-inline">
+                            <input type="radio" name="status" id="status0" value="0" #if($!{apply.status}==0) checked #end>
+                                                              未处理
+                          </label >
+                          
+						  </div>
+                       </div>	  					   
+					 									  					   					   					   					  					  
+					   <div class="form-group">
+                           <div class="col-sm-offset-2 col-sm-10">
+                              <button type="btn" class="btn btn-default"> 提交</button>
+                           </div>
+                       </div>
+						  
+					    </td></tr>
+			           </table>	
+                  </form>
+						
+						
+					</div>	
+               </div>
+			  </div>
+			</div>	
+				           
+       </div>	 	
+    <hr>
+		
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+</div>
+</body>
+</html>

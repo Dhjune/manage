@@ -1,0 +1,127 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+    <script >
+		function team_delete(id){
+			 var CarteValue = confirm("确认删除");
+            if(CarteValue){
+				 window.open ('/manage/base/transteam/delete?id='+ id  , '_self');
+				}
+			}
+    </script>
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+		<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">APPLICATION<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/app/create">app添加</a></li>
+                  <li><a href="/manage/base/app/list">app列表</a></li>              
+                </ul>
+              </div>
+			
+				<div class="btn-group">
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">平台管理 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/platform/create">添加平台</a></li>
+                  <li><a href="/manage/base/platform/list">平台列表</a></li>              
+                </ul>
+              </div>
+				
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">翻译团队 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/transteam/create">添加团队</a></li>
+                  <li><a href="/manage/base/transteam/list">团队列表</a></li>               
+                </ul>
+              </div><!-- /btn-group -->
+              			  
+			   <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">投票列表 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">			
+                  <li><a href="/manage/base/vote/create">添加投票</a></li>
+                  <li><a href="/manage/base/vote/list">投票列表</a></li>    
+				  <li><a href="#">其他</a></li> 
+				  
+                </ul>
+              </div>
+			   
+            </div>
+			<hr>
+					<p class="text-center text-primary">
+					<span style="color:blue"> 翻译团队
+                    </span>
+				</p>
+			<div class="highlight">
+				<br />
+			<div class="row">			  
+             			  		  
+			  <table class="table table-bordered">																			
+				<tr>
+					<th>团队名称</th>
+					<th>联系人</th>
+					<th>联系方式</th>	
+					<th>是否认证</th>
+					<th>操作</th>
+				</tr>				
+				#foreach($item in $!{context.list})
+                <tr>
+					<td>$!{item.name}</td>
+					<td>$!{item.linkName}</td>
+					<td>$!{item.linkTele}&nbsp;&nbsp;$!{item.email}</td>
+					<td>#if($!{item.isAuth} == 0)
+							未认证
+							#else
+								已认证
+								#end
+					</td>
+					
+					<td><a class="btn btn-info btn-xs" type="button" href="/manage/base/transteam/view?id=$!{item.id}">
+					查看
+					</a>
+					<a class="btn btn-info btn-xs" type="button" href="/manage/base/transteam/update?id=$!{item.id}">
+					修改
+					</a>
+					<a class="btn btn-info btn-xs" type="button" onclick="team_delete($!{item.id})">
+					删除
+					</a></td>
+				</tr>
+				#end
+				</table>
+				#parse("/layout/pagenav.vm")
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,360 @@
+<html >
+<head>
+	
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+	<link rel="stylesheet" type="text/css" href="/manage/static/kindeditor/themes/default/default.css"/>	
+	<link rel="stylesheet" type="text/css" href="/manage/static/uploadify/uploadify.css"/>
+	<script charset="utf-8" src="/manage/static/kindeditor/kindeditor.js"></script>
+	<script charset="utf-8" src="/manage/static/kindeditor/lang/zh_CN.js"></script>
+	
+	<script charset="utf-8" src="/manage/static/uploadify/jquery.uploadify.js"></script>
+	
+	<script>
+	var editor = null;
+	
+		var editor = null;
+			KindEditor.ready(function (K) {
+            editor = K.editor({			    
+                allowFileManager: true,
+                fileManagerJson: '/manage/book/file/list',
+                uploadJson: '/manage/book/file/upload',
+                urlType: 'domain',
+                extraFileUploadParams : {
+                    part_id : $!{part.id},
+					plat_id : $("#platform option:selected").val(),
+					book_id : $!{part.book.id}                        
+                }
+            });								
+			K('#fileUrlBtn').click(function() {
+				editor.loadPlugin('insertfile', function() {
+					editor.plugin.fileDialog({						
+						fileUrl :  K('#Url').val(),					
+						clickFn : function(data) {														
+							K('#fileName').val(data.fileName);
+							K('#fileType').val(data.fileExt);
+							K('#fileSize').val(data.size);
+							K('#imageUrl').val(data.path);
+							K('#Url').val(data.url);
+							
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+		});		
+		
+		function  clectPlat(){
+			var url = "/manage/base/platform/cleck";
+			alert($("#platform").val());
+			$.get(url,{platId:$("#platform option:selected").val()},function (data){                   				
+                },"json");								
+		}
+	/*							
+	$(document).ready(function() {
+   		$("#file_upload").uploadify({
+        //开启调试
+        'debug' : false,
+        //是否自动上传
+        'auto':false,
+        //超时时间
+        'successTimeout':99999,
+		'method':'post',
+        //附带值
+        'formData':{
+             part_id : $!{part.id},
+					plat_id : $("#platform option:selected").val(),
+					book_id : $!{part.book.id}
+        },
+        //flash
+        'swf': "/manage/static/uploadify/uploadify.swf",
+        //不执行默认的onSelect事件
+        'overrideEvents' : ['onDialogClose'],
+        //文件选择后的容器ID
+        'queueID':'fileQueue',
+        //服务器端脚本使用的文件对象的名称 $_FILES个['upload']
+        'fileObjName':'upload',
+        //上传处理程序
+        'uploader':'/manage/book/file/upload',
+        //浏览按钮的背景图片路径
+        'queueID': 'fileQueue',
+        //浏览按钮的宽度
+        'width':'100',
+        //浏览按钮的高度
+        'height':'32',
+        //expressInstall.swf文件的路径。
+        'expressInstall':'expressInstall.swf',
+        //在浏览窗口底部的文件类型下拉菜单中显示的文本
+        //'fileTypeDesc':'支持的格式：',
+        //允许上传的文件后缀
+        //'fileTypeExts':'*.jpg;*.jpge;*.gif;*.png,*.doc',
+        //上传文件的大小限制
+        'fileSizeLimit':'30MB',
+        //上传数量
+        'queueSizeLimit' : 25,
+        //每次更新上载的文件的进展
+        'onUploadProgress' : function(file, bytesUploaded, bytesTotal, totalBytesUploaded, totalBytesTotal) {
+             //有时候上传进度什么想自己个性化控制，可以利用这个方法
+             //使用方法见官方说明
+        },
+        //选择上传文件后调用
+        'onSelect' : function(file) {
+                  
+        },
+        //返回一个错误，选择文件的时候触发
+        'onSelectError':function(file, errorCode, errorMsg){
+            switch(errorCode) {
+                case -100:
+                    alert("上传的文件数量已经超出系统限制的"+$('#file_upload').uploadify('settings','queueSizeLimit')+"个文件！");
+                    break;
+                case -110:
+                    alert("文件 ["+file.name+"] 大小超出系统限制的"+$('#file_upload').uploadify('settings','fileSizeLimit')+"大小！");
+                    break;
+                case -120:
+                    alert("文件 ["+file.name+"] 大小异常！");
+                    break;
+                case -130:
+                    alert("文件 ["+file.name+"] 类型不正确！");
+                    break;
+            }
+        },
+        //检测FLASH失败调用
+        'onFallback':function(){
+            alert("您未安装FLASH控件，无法上传图片！请安装FLASH控件后再试。");
+        },
+        //上传到服务器，服务器返回相应信息到data里
+        'onUploadSuccess':function(file, data, response){
+		
+            	$('#fileName').val(data.fileName);
+				$('#fileType').val(data.fileExt);
+				$('#fileSize').val(data.size);
+				$('#imageUrl').val(data.path);
+				$('#Url').val(data.url);
+				alert(data.url);
+				
+        }
+    	});
+	});
+	*/
+	function  clectPlatForm(){
+			
+			 var plat_id =  $("#platform option:selected").val();
+			 editor.extraFileUploadParams.plat_id = plat_id;
+			// alert(editor.extraFileUploadParams.plat_id);
+			//editor.formData.plat_id = plat_id;	
+			//alert(editor.extraFileUploadParams.part_id);
+		}
+		
+	</script>			
+    <style type="text/css">
+        .form_settings
+        {
+                width: 80%;               
+        }
+        </style
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">             
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">漫画家 <span class="caret"></span></button>
+				  <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/author/create">添加漫画家</a></li>
+                  <li><a href="/manage/book/author/list">漫画家列表</a></li>   
+                </ul>
+              </div>
+				
+			  <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">漫画分类 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/type/create">添加分类</a></li>
+                  <li><a href="/manage/book/type/list">分类列表</a></li>
+                </ul>
+              </div><!-- /btn-group -->
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">漫画资源<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/create">添加漫画</a></li>
+                  <li><a href="/manage/book/list">漫画列表</a></li>
+                  
+                </ul>
+              </div><!-- /btn-group -->
+              
+             
+			   
+            </div>
+			<hr>
+				<p class="text-center text-primary">
+					<span style="color:blue">章节内容
+                    </span>
+				</p>
+			<div class="highlight">
+				
+			 <p class="text-left text-primary">
+    					<a href="/manage/book/list" >
+                                  漫画>       
+			          </a><a href="/manage/book/view?id=$!{part.book.id}" >
+                          $!{part.book.bookTitle}       
+					  </a>><a href="/manage/book/part/view?id=$!{part.id}" >
+                          $!{part.partName}       
+			          </a>
+                       
+    				</p>
+			  <div class="row">
+			               		  
+			  <br>
+				
+			      <form role="form" class="form-horizontal" method="post" action="/manage/book/part/info/create" >
+					<input type="hidden" name="partId" value="$!{part.id}">
+						
+					<input type="hidden" name="fileName" id="fileName" >
+				    <input type="hidden" name="fileType" id="fileType" >
+				    <input type="hidden" name="fileSize" id="fileSize" >
+					<input type="hidden" name="imageUrl" id="imageUrl" >	
+					<input type="hidden" name="updateUser" value="$!{admin.login_name}" />
+					<!--	
+					<table class="table table-bordered">
+						<tr><td>											  					   
+					  <div class="form-group">
+                         <label for="forHeight" class="col-sm-2 control-label">平台选择</label>
+                        <div class="col-sm-6">
+                         <select class="bookAuthor" name="platId" id="platform" onchange="clectPlatForm()">
+							 
+						    #foreach($platform in $!{platforms})
+                              <option value="${platform.id}">${platform.name}</option>                        
+						    #end
+                        </select>
+                        </div>
+                      </div>
+					  -->
+					<table class="table table-bordered">
+						<tr><td>											  					   
+					  <div class="form-group">
+                         <label for="forHeight" class="col-sm-2 control-label">平台选择</label>
+                        <div class="col-sm-6">
+                         <select class="bookAuthor" name="platId" id="platform" onchange="clectPlatForm()">
+							 
+						   
+                              <option value="0">所有平台</option>                        
+						    
+                        </select>
+                        </div>
+                      </div>
+						
+					  <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">是否送点券<span id="forlinkEmail" style="color:red"> </span></label>						 
+						  <label class="radio-inline">
+                            <input type="radio" name="hasPoint" id="hasPoints1" value="1" checked>
+                                                              是
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="hasPoint" id="hasPoints2" value="0" >
+                                                            否
+                          </label>                        
+                       </div>
+					   
+					   <div class="form-group">
+                         <label for="forHeight" class="col-sm-2 control-label">最大点券数</label>
+                        <div class="col-sm-4">
+                          <input type="text" name="maxPoints" class="form-control" value="0" id="maxPoints" placeholder="">
+                        </div>
+                      </div>
+					   					   
+					  <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">*是否计费:<span id="forlinkEmail" style="color:red"> </span></label>
+						 
+						  <label class="radio-inline">
+                            <input type="radio" name="hasFee" id="hasFee1" value="1" >
+                                                              收费
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="hasFee" id="hasFee2" value="0" checked>
+                                                             免费
+                          </label>                        
+                       </div>
+					   
+					   <div class="form-group">
+                         <label for="forHeight" class="col-sm-2 control-label">付费金额</label>
+                        <div class="col-sm-4">
+                          <input type="text" name="fee" class="form-control" value="0" id="fee" placeholder="">
+                        </div>
+                      </div>
+					   
+					  <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">状态<span id="forlinkEmail" style="color:red"> </span></label>			 
+						  <label class="radio-inline">
+                            <input type="radio" name="status" id="status1" value="1" checked>
+                                                              使用
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="status" id="status0" value="0">
+                                                             不使用
+                          </label>                        
+                       </div>
+					   
+					   
+					   
+					  <div class="form-group">
+                      <label for="forbriefIntro" class="col-sm-2 control-label">漫画文件</label>
+					   <div class="col-sm-4">
+						<!--	
+						<input type="file" name="file_upload" id="file_upload"/>
+					   <div id="fileQueue">
+						</div>
+					   <a href="javascript:$('#file_upload').uploadify('upload')">上传</a>|
+					-->
+                      	<button type="button" class="btn btn-mini" id="fileUrlBtn">选择文件
+                        </button>
+						
+                        <br>
+                        
+                        <input type="text" name="Url" id="Url">
+							</div>
+                    	</div>
+					  					  					  				   		   
+					   <div class="form-group">
+                           <div class="col-sm-offset-2 col-sm-10">
+                              <button type="submit" class="btn btn-default"> 提交</button>
+                           </div>
+                       </div>
+						  
+					    </td></tr>
+			           </table>	
+                  </form>
+				
+				
+			   							
+			  </div>
+			  
+			</div>	
+			
+			
+			
+       </div>
+	   
+      </div>  
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

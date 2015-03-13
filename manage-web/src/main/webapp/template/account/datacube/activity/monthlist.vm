@@ -1,0 +1,290 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("./layout/header.html")   
+	<script type="text/javascript" src="/manage/static/highcharts/js/highcharts.js"></script>
+	<script type="text/javascript" src="/manage/static/highcharts/js/modules/exporting.js"></script>
+    <script type="text/javascript" src="/manage/static/js/jquery.dateSelector.js"></script>
+	<script type="text/javascript" src="/manage/static/js/jquery.json-2.4.js"></script>
+	<script type="text/javascript" src="/manage/static/js/manage-use.js"></script>	
+    <script >
+	
+	var url = '/manage/datacube/activity/stat/pageNavJson';
+	var data = {'pageIndex':1};
+	
+	function repeatPage(context){
+	
+		inithighcharts(context);
+		
+	}
+	
+	function inithighcharts(context){
+	
+		var xline = new Array();
+		var user_num = new Array();
+		
+															
+		for(var index=0;index<context.list.length;index++){
+			
+			xline.push("<a href='/manage/datacube/activity/stat/month/view?acId="+context.list[index].activity_id+'&platId='+context.list[index].platform_id+'&stat_day='+context.list[index].stat_day+"'>"+context.list[index].subject+'('+context.list[index].stat_day+')'+"</a>");
+			user_num.push(context.list[index].count);
+			
+			
+		}
+		
+		$('#container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '活动参与统计'
+            },
+            subtitle: {
+                text: document.getElementById('selectdate').value
+            },
+			exporting: {
+				type : "application/pdf",
+				filename : "test",
+				url : "http://115.236.23.145:8080/highcharts-export-web/"
+    		},
+            xAxis: {
+                categories: xline
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '数据统计'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table style="width:120px">',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+			
+            series: [{
+                name: "参与人数",
+                data: user_num
+    
+            }]
+        });
+		initListener();
+  
+	}
+	
+	function initListener(){	
+		
+		var Aicons = document.getElementsByName('pageIndex');			
+		var plats = document.getElementsByName('platform_id');
+		var selectdate = document.getElementById('selectdate');
+		var selectdate_selectYear = document.getElementById('selectdate_selectYear');
+		var selectdate_selectMonth = document.getElementById('selectdate_selectMonth');
+		
+		for(var i=0;i<Aicons.length;i++){				
+			Aicons[i].onclick = function (){	
+			
+				execAction(this,url,data);
+				
+			}						
+		}
+		selectdate_selectYear.onchange =function (){
+			
+			execAction(selectdate,url,data);
+		}
+		
+		selectdate_selectYear.onchange =function (){
+			
+			execAction(selectdate,url,data);
+		}
+		
+		
+		
+		selectdate_selectMonth.onchange =function (){
+		
+			execAction( selectdate,url,data);
+		}
+		for(var i=0;i<plats.length;i++){				
+			plats[i].onclick = function(){	
+				
+				execAction(this,url,data);
+				
+			}						
+		}	
+			
+	}
+	
+    $(function () {
+		$("#selectdate").dateSelector({dayEnabled:false});
+		var xline = new Array();
+		var user_num = new Array();
+				
+		#foreach($item in $!{context.list})
+			
+			xline.push("<a href='/manage/datacube/activity/stat/month/view?acId="+'$!{item.getActivity_id()}'+'&platId='+'$!{item.getPlatform_id()}&stat_day='+'$!{item.getStat_day()}'+"'>"+'$!{item.getSubject()}'+'('+'$!{item.getStat_day()}'+')'+"</a>");
+			user_num.push($!{item.getCount()});
+						
+		#end
+	
+        $('#container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '活动参与统计'
+            },
+            subtitle: {
+                text: document.getElementById('selectdate').value
+            },
+			exporting: {
+				type : "application/pdf",
+				filename : "test",
+				url : "http://115.236.23.145:8080/highcharts-export-web/"
+    		},
+            xAxis: {
+                categories: xline
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '数据统计'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+			
+            series: [{
+                name: '参与人数',
+                data: user_num
+    
+            }]
+        });
+		initListener();
+    });
+	
+    </script>
+</head>
+
+<body>
+#parse("./layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("./layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">平台统计<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                   <li><a href="/manage/datacube/base/user/stat/day/list">新用户统计</a></li>
+                  
+                </ul>
+              </div>
+				
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">漫画数据<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/datacube/book/stat/count/list">汇总统计</a></li>
+                  <li><a href="/manage/datacube/book/stat/month/list">月度统计</a></li>
+                  <li><a href="/manage/datacube/book/stat/day/list">日常统计</a></li>
+				                
+                  
+                </ul>
+              </div>
+              <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">活动数据 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/datacube/activity/stat/month/list">月度统计</a></li>
+                  
+                  <li class="divider"></li>
+                  
+                </ul>
+              </div>
+              <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">用户数据 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">用户互动</a></li>
+                  <li><a href="#">其他</a></li>                 
+                 <li class="divider"></li>         
+                </ul>
+              </div>
+			  			 
+            </div>
+			<hr>
+			<div class="highlight">
+				
+				<div class="thumbnail">
+        				<dl class="dl-horizontal ">
+							
+							<dt>按平台</dt>
+							<dd>
+								#foreach($item in $plats)
+									
+									<label class="radio-inline">
+										<input type="radio" name="platform_id"  value="$!{item.id}" >$!{item.name} </label >										
+								#end
+							</dd>
+							
+                           <dt>按时间</dt>
+						   <dd>
+							
+								 <input name="stat_month" id="selectdate" type="text" value="$!{stat_day}" />
+								 
+						   </dd>
+						   							
+                          </dl>
+        			 </div>
+				
+				
+				<div id="container" style="min-width:700px;height:400px"></div>
+				<div id="pageNav" class=" pull-right">
+					#parse("/layout/pagenav.vm")
+                </div>
+             
+				
+			</div>	
+				
+            
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

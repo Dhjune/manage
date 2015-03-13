@@ -1,0 +1,184 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+			<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">用户管理 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/user/list">用户列表</a></li>
+                
+                </ul>
+              </div>
+								
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">用户评论<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                   <li><a href="/manage/user/comment/list">评论库</a></li>
+				  <li><a href="#">最新评论库</a></li>
+                  
+                </ul>
+              </div><!-- /btn-group -->
+                            			   
+            </div>
+			<hr>
+			<p class="text-center text-primary">
+				  
+					<span style="color:blue">用户展示
+                    </span>
+			</p>
+			<div class="highlight">
+				
+			<p class="text-left text-primary">
+					用户：<span style="color:red"> $!{user.name}
+                    </span>
+				</p>	
+				
+			<div class="row">
+              <div class="col-md-3">
+				<div class="thumbnail">
+                       <div class="caption">
+				<img src="/manage/static/image/user-default.jpg" alt="" class="img-thumbnail" style="width:160px;height:200px">
+				<p class="text-left text-primary">
+                    <a href="#" class="btn btn-primary btn-xs" >会员等级$!{user.userLevel}</a>
+				<a href="#" class="btn btn-primary btn-xs" >#if($!{user.userType}==0)  普通用户 #elseif($!{user.userType}==1) 资深漫迷
+								#elseif($!{user.userType}==2) 作者 #end</a>
+				</p>
+				<p class="text-left text-primary">
+					 昵称：<span style="color:red">$!{user.nickName}
+                    </span>性别：<span style="color:red" >$!{user.sex}
+                    </span>
+				</p>
+				
+                <p class="text-left text-primary">
+					
+					<a href="#" class="btn btn-default btn-xs" >
+						#if($!{user.status}==0)  预注册 #elseif($!{user.status}==1) 正常
+						#elseif($!{user.status}==2) 注销 #elseif($!{user.status}==3) 禁用  #else	异常 #end
+					</a>	
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<a href="#" class="btn btn-default btn-xs" >
+						#if($!{user.authFlag}==0)  未认证 #elseif($!{user.authFlag}==1) 认证中
+								#elseif($!{user.authFlag}==2) 已认证 #else 认证被拒 #end
+					</a>
+				</p>
+				
+				<!--
+				<p class="text-left text-primary">
+					#if($!{user.getVip()}==1) 会员 #else 非会员 #end
+					#if($!{user.type}==0)  普通用户 #elseif($!{user.type}==1) 资深漫迷
+								#elseif($!{user.type}==2) 作者 #end
+					&nbsp;&nbsp;&nbsp;
+					#if($!{user.status}==0)  预注册 #elseif($!{user.status}==1) 正常
+						#elseif($!{user.status}==2) 注销 #elseif($!{user.status}==3) 禁用  #else 异常 #end			
+                </p>
+				-->
+					</div>
+				</div>
+			  </div>
+             
+              <div class="col-md-8">
+				    
+				
+				
+				
+				
+				<p class="text-left ">
+					出生日期：&nbsp;&nbsp;<span class="text-primary" >$!{user.birthdate}
+                    </span>
+				</p>
+				
+				<p class="text-left ">
+					联系方式：&nbsp;&nbsp;<span class="text-primary" >$!{user.mobile} ||$!{user.telephone} 
+                    </span>
+				</p>
+				
+				<p class="text-left ">
+					QQ：&nbsp;&nbsp;<span class="text-primary" >$!{user.qq}
+                    </span>
+				</p>
+				
+				<p class="text-left ">
+					剩余积分：<span class="text-primary" >$!{userInfo.score}
+                    </span>&nbsp;&nbsp;
+					已使用：<span class="text-info" >$!{userInfo.usedScore}
+                    </span>&nbsp;&nbsp;
+					 积分总量：<span class="text-warring" >$!{userInfo.allScore}
+                    </span>
+					
+				</p>
+				<p class="text-left ">
+					剩余点券：<span class="text-primary" >$!{userInfo.ticket}
+                    </span>&nbsp;&nbsp;
+					已使用：<span class="text-primary" >$!{userInfo.userTicket}
+                    </span>&nbsp;&nbsp;
+					 点券总量：<span class="text-primary" >$!{userInfo.allTicket}
+                    </span>
+					
+				</p>
+				<p class="text-left ">
+					简介：&nbsp;&nbsp;<span class="text-primary" >$!{user.intro}
+                    </span>
+				</p>
+				
+				<p class="text-left ">
+					行为：&nbsp;&nbsp;<span >$!{book.briefIntro}
+                    </span>
+				</p>
+				<p class="text-left ">
+				<a href="/manage/user/read/list?userId=$!{user.id}" class="btn btn-primary btn-sm" >
+                                        阅读记录
+                </a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="" class="btn btn-primary btn-sm" >
+                                        活动参与
+                </a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="/manage/user/comment/list?userId=$!{user.id}" class="btn btn-primary btn-sm" >
+					评论$!{count}条                  
+                </a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="" class="btn btn-primary btn-sm" >
+					 点券兑换               
+                </a>&nbsp;&nbsp;&nbsp;&nbsp;
+				
+				<a href="/manage/user/score/list?userId=$!{user.id}" class="btn btn-primary btn-sm" >
+					 积分记录             
+                </a>
+				
+				</p>
+			  </div>
+            </div>
+			<br>
+											   			
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+ 
+	 	
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+</div>
+</body>
+</html>

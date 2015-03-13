@@ -1,0 +1,135 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+    <script >
+		function activity_delete(id){
+			 var CarteValue = confirm("确认删除");
+            if(CarteValue){
+				 window.open ('/manage/activity/delete?id='+ id  , '_self');
+				}
+			}				
+    </script>
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+				<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">活动管理<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="/manage/activity/list">活动列表</a></li>
+                     <li><a href="/manage/activity/create">添加活动</a></li>
+					 <li><a href="#">待续...</a></li>
+                     </ul>
+                 </div>
+				 
+				 <div class="btn-group">
+                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">用户互动<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">查看列表</a></li>
+                     <li><a href="#">待续...</a></li>
+                     </ul>
+                 </div>
+			   
+			   
+            </div>
+			<hr>
+				<p class="text-center text-primary">
+    				<span style="color:blue">活动列表
+                    </span>
+    			</p>
+			<div class="highlight">
+				
+				<div class="btn-group">
+				  <a type="button" id="status-1" href="/manage/activity/list?status=-1" class="btn btn-default">所有</a>
+                  <a type="button" id="status0" href="/manage/activity/list?status=0" class="btn btn-default">未进行</a>
+                  <a type="button" id="status1" href="/manage/activity/list?status=1" class="btn btn-default">进行中</a>
+                  <a type="button" id="status2" href="/manage/activity/list?status=2" class="btn btn-default">结束</a>
+                </div>
+			<div class="row">			  
+              			  
+			  
+			  <table class="table table-bordered">																			
+				<tr>
+					<th>活动主题</th>
+					<th >活动类别
+                    </th>
+					<th>活动时间</th>
+					<th>活动链接</th>	
+					<th>是否热门</th>
+					
+					<th>其他</th>
+				</tr>				
+				#foreach($item in $!{context.list})
+                <tr>
+					<td>$!{item.subject}</td>
+					<td>
+						#if($!{item.kind}==1)
+							漫画行
+							#elseif($!{item.kind}==2)
+								新星杯
+								#elseif($!{item.kind}==3)
+									漫画家创意部落
+									#end
+					</td>
+					<td>$!{item.startTime}&nbsp;至&nbsp;$!{item.endTime}</td>
+					<td><a class="btn" href="$!{item.showUrl}">$!{item.showUrl}</a></td>
+					<!--
+					<td>#if($!{item.intro.length()}>15)
+						$!{item.intro.substring(0,15)}...
+						#else
+							$!{item.intro}
+							#end						
+					</td>
+					-->
+					<td >
+						#if($!{item.hotFlag}==1)
+							热门
+							#else
+								非热门
+								#end
+                    </td>
+					<td><div class="btn-group btn-group-xs">
+						<a class="btn" href="/manage/activity/view?id=$!{item.id}">查看</a>
+						
+						<a class="btn" href="/manage/activity/update?id=$!{item.id}">修改</a>
+						
+						<a class="btn" onclick="activity_delete($!{item.id})">删除</a>
+					</div></td>
+				</tr>
+				#end
+				</table>
+				#parse("/layout/pagenav.vm")
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

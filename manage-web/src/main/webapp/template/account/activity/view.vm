@@ -1,0 +1,155 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+		<link rel="stylesheet" type="text/css" href="/manage/static/kindeditor/themes/default/default.css"/>	
+	<script charset="utf-8" src="/manage/static/kindeditor/kindeditor.js"></script>
+	<script charset="utf-8" src="/manage/static/kindeditor/lang/zh_CN.js"></script>
+    <script >
+					
+			KindEditor.ready(function (K) {
+             var editor = K.editor({
+                allowFileManager: true,
+                fileManagerJson: '/manage/ke/filelist',
+                uploadJson: '/manage/ke/upload',
+                urlType: 'domain',               
+            });								
+			K('#ImageUrlBtn').click(function() {
+				editor.loadPlugin('image', function() {
+					editor.plugin.imageDialog({						
+						imageUrl :  K('#ImageUrlImg').attr('src'),
+						clickFn : function(url, title, width, height, border, align) {
+							K('#ImageUrlImg').attr('src', url);							
+							K('#headImage').val(url);							
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+		});				
+    </script>
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+	
+    <div class="row row-offcanvas row-offcanvas-right">   	
+    	#parse("/layout/leftsider.html")	
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+			<div class="btn-group">
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">活动管理<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="/manage/activity/list">活动列表</a></li>
+                     <li><a href="/manage/activity/create">添加活动</a></li>
+					 <li><a href="#">待续...</a></li>
+                     </ul>
+                 </div>
+				 
+				 <div class="btn-group">
+                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">用户互动<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">查看列表</a></li>
+                     <li><a href="#">待续...</a></li>
+                     </ul>
+                 </div>
+			   
+			  
+            </div>
+			<hr>
+			<p class="text-center text-primary">
+				  
+					<span style="color:blue">活动详情
+                    </span>
+			</p>
+			<div class="highlight">
+				
+			 <p class="text-left text-primary">
+    			<a href="/manage/activity/list" >
+                                  活动    
+				</a>><a href="/manage/activity/view?id=$!{activity.id}" >
+                     $!{activity.subject}       
+				</a>
+				
+    		</p>	
+				
+			<p class="text-left text-primary">
+					<span style="color:red"> <$!{activity.subject}>
+                    </span>
+				</p>	
+				
+			<div class="row">
+              <div class="col-md-3">
+				<img src="$!{activity.imageUrl}" alt="" class="img-thumbnail" style="width:140px;height:160px">
+			  </div>
+             
+              <div class="col-md-8">
+				    
+				<p class="text-left text-primary">
+					活动平台：&nbsp;&nbsp;<span style="color:red"><$!{activity.platForm.name}>
+                    </span>
+				</p>
+				
+				<p class="text-left text-primary">
+					活动种类：&nbsp;&nbsp;<span style="color:red">#if($!{activity.kind}!="1")首页 #else 入口 #end
+                    </span>
+				</p>
+												
+				<p class="text-left ">
+					日期：&nbsp;&nbsp;<span class="text-primary" >$!{activity.startTime}至$!{activity.endTime}
+                    </span>
+				</p>
+				
+				<p class="text-left ">
+					热门状态：&nbsp;&nbsp;<span class="text-primary" >  #if($!{activity.hotFlag}!="1")非热门 #else 热门  #end
+                    </span>
+				</p>
+				
+				<p class="text-left ">
+					活动状态：&nbsp;&nbsp;<span >#if($!{activity.status}==0)未开始 #elseif($!{activity.status}==1) 已开始  #else 已结束  #end
+                    </span>
+				</p>
+				
+				<p class="text-left ">
+					简介：&nbsp;&nbsp;<span >$!{activity.intro}
+                    </span>
+				</p>
+				<p class="text-left ">
+				<a href="/manage/activity/image/list?acId=$!{activity.id}" class="btn btn-primary btn-sm" >
+					活动图片
+                </a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/manage/activity/apply/list?acId=$!{activity.id}" class="btn btn-primary btn-sm" >
+                                            活动反馈
+                </a>
+				&nbsp;&nbsp;&nbsp;&nbsp;<a href="/manage/activity/update?id=$!{activity.id}" class="btn btn-primary btn-sm" >
+                                            修改
+                </a>
+				</p>
+			  </div>
+            </div>
+			<br>
+			
+	        				
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+ 
+	 	
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+</div>
+</body>
+</html>

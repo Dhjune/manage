@@ -1,0 +1,138 @@
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+    <script >
+		
+		function app_delete(id){
+			 var CarteValue = confirm("确认删除");
+            if(CarteValue){
+				 window.open ('/manage/base/app/delete?id='+ id  , '_self');
+				}
+			}
+		
+    </script>
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">APPLICATION<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/app/create">app添加</a></li>
+                  <li><a href="/manage/base/app/list">app列表</a></li>              
+                </ul>
+              </div>
+			
+				<div class="btn-group">
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">平台管理 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/platform/create">添加平台</a></li>
+                  <li><a href="/manage/base/platform/list">平台列表</a></li>              
+                </ul>
+              </div>
+				
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">翻译团队 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/base/transteam/create">添加团队</a></li>
+                  <li><a href="/manage/base/transteam/list">团队列表</a></li>               
+                </ul>
+              </div><!-- /btn-group -->
+              			  
+			  <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">投票计划 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">			
+                  <li><a href="/manage/base/vote/create">新增</a></li>
+                  <li><a href="/manage/base/vote/list">列表</a></li>    
+				  <li><a href="#">其他</a></li> 
+				  
+                </ul>
+              </div>
+			   
+            </div>
+			<hr>
+				<p class="text-center text-primary">
+    				<span style="color:blue">APPLICATION
+                    </span>
+    			</p>
+			<div class="highlight">
+				
+				
+			<div class="row">			  
+              			  
+			  
+			  <table class="table table-bordered">																			
+				<tr>
+					<th>app名称</th>
+					
+					<th>app版本</th>
+					
+					<th>版本状态</th>
+					
+					<th>发布平台</th>
+													
+					<th>其他</th>
+				</tr>				
+				#foreach($item in $!{context.list})
+                <tr>
+					<td>$!{item.appName}</td>
+					<td>$!{item.appVersion}</td>
+					<td>
+						#if($!{item.versionType}==0)
+							内测
+						#elseif($!{item.versionType}==1)
+							公测
+						#else
+							正式
+						#end
+					</td>
+					<td>
+						$!{item.pubPlat}
+					</td>
+					
+					<td><div class="btn-group btn-group-xs">
+							
+						<!--<a class="btn btn-info btn-xs" type="button" href="view?id=$!{item.id}">查看</a>	-->
+						<a class="btn btn-info btn-xs" type="button" href="update?id=$!{item.id}">修改</a>
+												
+						<a class="btn btn-info btn-xs" type="button" onclick="app_delete('$!{item.id}')">删除</a>
+					</div></td>
+				</tr>
+				#end
+				</table>
+				#parse("/layout/pagenav.vm")
+			  </div>
+
+			</div>	
+				
+            
+       </div>
+
+      </div>  
+
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

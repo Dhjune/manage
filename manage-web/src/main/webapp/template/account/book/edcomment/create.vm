@@ -1,0 +1,199 @@
+<html >
+<head>
+	
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+	#include("/layout/header.html")   
+	<link rel="stylesheet" type="text/css" href="/manage/static/kindeditor/themes/default/default.css"/>	
+	<script charset="utf-8" src="/manage/static/kindeditor/kindeditor.js"></script>
+	<script charset="utf-8" src="/manage/static/kindeditor/lang/zh_CN.js"></script>
+	
+	<script>
+			KindEditor.ready(function (K) {
+             var editor = K.editor({
+                allowFileManager: true,
+                fileManagerJson: '/manage/ke/filelist',
+                uploadJson: '/manage/ke/upload',
+                urlType: 'domain',
+                
+            });								
+			K('#fileUrlBtn').click(function() {
+				editor.loadPlugin('insertfile', function() {
+					editor.plugin.fileDialog({						
+						fileUrl :  K('#imageUrl').val(),
+						clickFn : function(url, title) {												
+							K('#imageUrl').val(url);							
+							editor.hideDialog();
+						}
+					});
+				});
+			});
+		});		
+		
+		
+		
+		
+	</script>			
+    <style type="text/css">
+        .form_settings
+        {
+                width: 80%;               
+        }
+        </style
+</head>
+
+<body>
+#parse("/layout/top.vm")
+
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
+    	
+    	#parse("/layout/leftsider.html")
+		
+        <div class="col-xs-13 col-sm-10">
+            <div class="bs-example">
+				<div class="btn-group">             
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">漫画家 <span class="caret"></span></button>
+				  <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/author/create">添加漫画家</a></li>
+                  <li><a href="/manage/book/author/list">漫画家列表</a></li>   
+                </ul>
+              </div>
+				
+			  <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">漫画分类 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/type/create">添加分类</a></li>
+                  <li><a href="/manage/book/type/list">分类列表</a></li>
+                </ul>
+              </div><!-- /btn-group -->
+				
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">漫画资源<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/manage/book/create">添加漫画</a></li>
+                  <li><a href="/manage/book/list">漫画列表</a></li>
+                  
+                </ul>
+              </div>
+			  <!--  
+              
+              <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">漫画吐槽 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">吐槽信息</a></li>
+                  <li><a href="#">吐槽预设</a></li>                 
+                         
+                </ul>
+              </div>
+			  			 
+              <div class="btn-group">
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">编辑评论 <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+					<li><a href="#">评论库</a></li>
+                  <li><a href="#">新评论</a></li>
+                               
+                </ul>
+              </div>
+			  --> 
+            </div>
+			<hr>
+				<p class="text-center text-primary">
+					<span style="color:blue">编辑评论
+                    </span>
+				</p>
+			<div class="highlight">
+				
+				<p class="text-left text-primary">
+					<a href="/manage/book/list" >
+                                  漫画       
+					</a>><a href="/manage/book/view?id=$!{book.id}" >
+                             $!{book.bookTitle}       
+					 </a>                          				                   
+				</p>
+					
+			  <div class="row">
+			               		  
+			  <br>
+				
+			      <form role="form" class="form-horizontal" method="post" action="/manage/book/edcomment/create" >
+					<table class="table table-bordered">
+						<tr><td>
+					   <input type="hidden" name="token" value="$!{token}"/>
+					   <input type="hidden" name="bookId" value="$!{book.id}"/>
+					   <input type="hidden" name="updateUser" value="$!{admin.login_name}" />
+					   <div class="form-group">
+                        <label for="forpartName" class="col-sm-2 control-label">编辑姓名</label>
+                        <div class="col-sm-4">
+                          <input type="text" name="editorName" class="form-control" id="editorName" placeholder="">
+                        </div>
+                       </div>
+					   
+					  
+					   <div class="form-group">
+                        <label for="forpartName" class="col-sm-2 control-label">评论</label>
+                        <div class="col-sm-4">
+                          <textarea name="comment" id="comment" class="form-control" rows="3"></textarea>
+                        </div>
+                       </div>
+					   					  				   
+					  <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">状态<span id="forlinkEmail" style="color:red"> </span></label>			 
+						  <label class="radio-inline">
+                            <input type="radio" name="status" id="status1" value="1" checked>
+                                                              有效
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="status" id="status0" value="0">
+                                                             无效
+                          </label>                        
+                       </div>
+					   
+					   <div class="form-group" >
+                         <label for="forlinkEmail" class="col-sm-2 control-label">推荐<span id="forlinkEmail" style="color:red"> </span></label>			 
+						  <label class="radio-inline">
+                            <input type="radio" name="recommendFlag" id="recommendFlag1" value="1" checked>
+                                                              是
+                          </label >
+                          <label class="radio-inline">
+                            <input type="radio" name="recommendFlag" id="recommendFlag0" value="0">
+                                                             否
+                          </label>                        
+                       </div>
+					   
+					   <div class="form-group">
+                           <div class="col-sm-offset-2 col-sm-10">
+                              <button type="submit" class="btn btn-default"> 提交</button>
+                           </div>
+                       </div>
+						  
+					    </td></tr>
+			           </table>	
+                  </form>
+				
+				
+			   							
+			  </div>
+			  
+			</div>	
+			
+			
+			
+       </div>
+	   
+      </div>  
+    <hr>
+
+    <footer>
+        <p>&copy; Company 2013</p>
+    </footer>
+
+</div>
+
+</body>
+</html>
